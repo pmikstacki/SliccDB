@@ -22,8 +22,8 @@ Below you'll find a list of features that will be included in the 1st milestone 
 - [x] Basic Debugger App (Ability to add, remove, edit nodes and relations)
 - [x] Antlr-Generated OpenCypher Parser, Lexer and ListenerBase
 - [x] CREATE Clause
-- [ ] MATCH Clause
-- [ ] RETURN Clause
+- [x] MATCH Clause
+- [x] RETURN Clause
 - [ ] MERGE Clause
 
 #### Can I help?
