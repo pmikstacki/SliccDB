@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFrameworks>net461;net472;netcoreapp3.1;net5.0-windows</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>Microsoft.Msagl.WpfGraphControl</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath />
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net472' OR '$(TargetFramework)' == 'netcoreapp3.1' ">
+    <DefineConstants>$(DefineConstants);FEATURE_PIXELS_PER_DPI</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj" />
+    <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj" />
+  </ItemGroup>
+</Project>

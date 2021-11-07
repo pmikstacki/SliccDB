@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ChristopheGraphs": {
+      "commandName": "Project",
+      "commandLineArgs": "ng 10 diff 10 onlydiff inputDir Z:\\ outputDir c:\\tmp /h"
+    }
+  }
+}

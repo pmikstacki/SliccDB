@@ -1,0 +1,145 @@
+﻿<syncfusion:ChromelessWindow
+        x:Class="SliccDB.Explorer.Views.MainWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+        xmlns:syncfusionskin ="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+        syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=Office2019Black}"
+        xmlns:core="clr-namespace:SliccDB.Core;assembly=SliccDB"
+        xmlns:wpfGraphControl="http://mlsagl"
+        xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        xmlns:utility="clr-namespace:SliccDB.Explorer.Utility"
+        mc:Ignorable="d" Height="450" Width="800" Title="SLICC DB Explorer" Icon="/Res/SLICC_128.png">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
+    </Window.Resources>
+    <Grid>
+        <Grid.FocusVisualStyle>
+            <Style/>
+        </Grid.FocusVisualStyle>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Margin="0,0,3,0">
+            <StackPanel Background="#FF3B3A39">
+                <syncfusion:SfAccordion SelectionMode="One" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0">
+                    <syncfusion:SfAccordionItem Header="Open Database" Height="Auto">
+                        <StackPanel>
+                            <Button Content="Open..." x:Name="OpenDatabase"></Button>
+                            <Button Content="Save" x:Name="SaveDatabase"></Button>
+                        </StackPanel>
+                    </syncfusion:SfAccordionItem>
+                    <syncfusion:SfAccordionItem Header="Create Node" HorizontalContentAlignment="Stretch" IsEnabled="{Binding IsDatabaseConnected}">
+                        <StackPanel>
+                            <syncfusion:PropertyGrid SelectedObject="{Binding Node}">
+                            </syncfusion:PropertyGrid>
+                            <Button x:Name="AddNode" Content="Add Node"></Button>
+                        </StackPanel>
+                    </syncfusion:SfAccordionItem>
+                    <syncfusion:SfAccordionItem Header="Create Relation" IsEnabled="{Binding IsDatabaseConnected}">
+                        <StackPanel>
+                            <syncfusion:PropertyGrid SelectedObject="{Binding Relation}">
+                            </syncfusion:PropertyGrid>
+                            <Button x:Name="AddRelation" Content="Add Relation"></Button>
+                        </StackPanel>
+                    </syncfusion:SfAccordionItem>
+                    <syncfusion:SfAccordionItem Header="Delete Node" IsEnabled="{Binding IsDatabaseConnected}"/>
+                    <syncfusion:SfAccordionItem Header="Delete Relation" IsEnabled="{Binding IsDatabaseConnected}"/>
+                    <syncfusion:SfAccordionItem Header="Clear Database" IsEnabled="{Binding IsDatabaseConnected}">
+                        <Button Name="ClearDatabase" Content="Clear"></Button>
+                    </syncfusion:SfAccordionItem>
+                </syncfusion:SfAccordion>
+
+            </StackPanel>
+        </Grid>
+        <GridSplitter ShowsPreview="true" Width="3" Grid.Column="0"/>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TabControl Margin="0,0,0,5" Grid.Row="0">
+                <TabItem Header="Full Structure">
+                    <wpfGraphControl:AutomaticGraphLayoutControl x:Name="LayoutControl" Graph="{Binding Graph}" Background="#FF3B3A39" Foreground="White"/>
+                </TabItem>
+                <TabItem Header="Query Results Structure">
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+                    <HeaderedItemsControl Header="Query Results" Name="QueryResults" ></HeaderedItemsControl>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+            <GridSplitter Grid.Row="0"  Grid.RowSpan="1" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="5"/>
+            <Grid Grid.Row="1" Background="{StaticResource ContentBackground}" IsEnabled="{Binding IsDatabaseConnected}">
+                <utility:BindableAvalonEditor x:Name="CypherInput" Foreground="White" Text="{Binding CypherQuery}" Background="{StaticResource ContentBackground}" SyntaxHighlighting="{Binding HighlightForCypher}" ShowLineNumbers="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Margin="0,0,115,0" />
+                <syncfusion:ButtonAdv Name="ExecuteCypher" HorizontalAlignment="Right" Width="90"  Margin="0,0,10,0" BorderBrush="{x:Null}" Height="29" VerticalAlignment="Center" IsDefault="True" Background="#FF2D5AAA" Label="Execute" LargeIcon="/Res/play-outline.png" SmallIcon="/Res/play-outline.png" />
+            </Grid>
+        </Grid>
+        <Border Grid.Column="1" BorderBrush="#FF292827"  Width="300" HorizontalAlignment="Right" BorderThickness="2, 0 ,0 ,0" Visibility="{Binding Path=ShowInfoPanel, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True" >
+            <Grid Grid.Column="1"  Width="300" HorizontalAlignment="Right" Background="#FF3B3A39" >
+                <syncfusion:ButtonAdv  Name="CloseEntityInfoPanel" Height="34" VerticalAlignment="Top" HorizontalAlignment="Right" Width="25" Background="{x:Null}" SmallIcon="/Res/close-outline.png" LargeIcon="/Res/close-outline.png" Label="{x:Null}" IconStretch="Fill" IconHeight="25" IconWidth="25" BorderBrush="{x:Null}" Foreground="{x:Null}" >
+                </syncfusion:ButtonAdv>
+                <StackPanel Margin="15">
+                    <TextBlock Text="Entity Info" Margin="5, 20, 5, 20" FontSize="15" HorizontalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="Type:"></TextBlock>
+                        <TextBlock Text="{Binding SelectedType}" Name="SelectedType"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="Hash:"></TextBlock>
+                        <TextBox Background="Transparent"
+                             Text="{Binding SelectedHash}"
+                             Name="SelectedHash"
+                             BorderThickness="0"
+                             IsReadOnly="True"
+                             TextWrapping="Wrap" />
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="5">
+                        <TextBlock Text="Labels:"></TextBlock>
+                        <ItemsControl ItemsSource="{Binding SelectedTags}">
+                            <ItemsControl.Resources>
+                                <ResourceDictionary>
+                                    <Style TargetType="StackPanel" x:Key="hoverStackPanel1">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Opacity" Value="1" />
+                                                <Setter Property="Background" Value="{utility:RandomColor}"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="False">
+                                                <Setter Property="Opacity" Value="0.7" />
+                                                <Setter Property="Background"   Value="{utility:RandomColor}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ResourceDictionary>
+                            </ItemsControl.Resources>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Style="{StaticResource hoverStackPanel1}"
+                                            Margin="0,0,10,5">
+                                        <TextBlock Text="{Binding ., StringFormat=:{0}}" Margin="7,0,10,0" Foreground="White" FontSize="14" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Properties:"></TextBlock>
+                        <syncfusion:SfDataGrid x:Name="PropertiesTable" ItemsSource="{Binding Properties}">
+
+                        </syncfusion:SfDataGrid>
+                    </StackPanel>
+
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</syncfusion:ChromelessWindow>

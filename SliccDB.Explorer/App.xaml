@@ -1,0 +1,19 @@
+﻿<Application x:Class="SliccDB.Explorer.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:syncfusionskin ="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+             xmlns:explorer="clr-namespace:SliccDB.Explorer">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <explorer:SliccBootstrapper x:Key="Bootstrapper" />
+                </ResourceDictionary>
+                <ResourceDictionary Source="/Syncfusion.Themes.Office2019Black.WPF;component/common/brushes.xaml"/>
+                <ResourceDictionary Source="Res/CypherFormats.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Res/CypherLexems.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

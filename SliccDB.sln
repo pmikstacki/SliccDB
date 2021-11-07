@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SliccDB", "SliccDB\SliccDB.csproj", "{204CCFA4-A64A-4405-B40A-A82F94B9E2FF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SliccDebugger", "SliccDBDebugger\SliccDebugger.csproj", "{1CC9C336-9B09-46F9-98F7-702DC7E1721B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SliccDB.Explorer", "SliccDB.Explorer\SliccDB.Explorer.csproj", "{1CC9C336-9B09-46F9-98F7-702DC7E1721B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SliccDB.Cypher", "SliccDB.Cypher\SliccDB.Cypher.csproj", "{641D6334-23DB-4401-AE84-7C36EB5E9A78}"
 EndProject
