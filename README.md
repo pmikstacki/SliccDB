@@ -27,4 +27,4 @@ Below you'll find a list of features that will be included in the 1st milestone 
 - [ ] MERGE Clause
 
 #### Can I help?
-Of course! Any help with the Cypher Interpreter will be appreciated. Currently I use ![Raiload Diagrams](https://s3.amazonaws.com/artifacts.opencypher.org/M16/railroad/Cypher.html) from official OpenCypher website to look for lexems and then for every pattern I walk the tree and extract what is needed. This architecture while simple, is not optimal and it would be far better if I were to build some kind of a command object inside every block and based on that operated on the database. 
+Of course! Any help with the Cypher Interpreter will be appreciated. Currently I use [Raiload Diagrams](https://s3.amazonaws.com/artifacts.opencypher.org/M16/railroad/Cypher.html) from official OpenCypher website to look for lexems and then for every pattern I walk the tree and extract what is needed. This architecture while simple, is not optimal and it would be far better if I were to build some kind of a command object inside every block and based on that operated on the database. 
