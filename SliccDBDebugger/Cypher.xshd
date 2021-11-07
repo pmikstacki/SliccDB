@@ -1,0 +1,54 @@
+﻿<?xml version="1.0"?>
+<SyntaxDefinition name="OpenCypher"
+                  xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+	<Color name="Comment" foreground="Green" />
+	<Color name="String" foreground="Blue" />
+
+	<!-- This is the main ruleset. -->
+	<RuleSet>
+		<Span color="Comment" begin="//" />
+		<Span color="Comment" multiline="true" begin="/\*" end="\*/" />
+
+		<Span color="String">
+			<Begin>"</Begin>
+			<End>"</End>
+			<RuleSet>
+				<!-- nested span for escape sequences -->
+				<Span begin="\\" end="." />
+			</RuleSet>
+		</Span>
+
+		<Keywords fontWeight="bold" foreground="LightSalmon">
+			<Word>SELECT</Word>
+			<Word>CREATE</Word>
+			<Word>MATCH</Word>
+			<Word>USE</Word>
+			<Word>MERGE</Word>
+			<Word>OPTIONAL</Word>
+			<Word>RETURN</Word>
+			<Word>WITH</Word>
+			<Word>AND</Word>
+			<Word>OR</Word>
+			<Word>DELETE</Word>
+			<Word>SET</Word>
+			<Word>UNWIND</Word>
+			<Word>ORDER BY</Word>
+			<Word>SKIP</Word>
+			<Word>LIMIT</Word>
+			<Word>UNION</Word>
+			<Word>RETURN</Word>
+			<Word>AS</Word>
+			<Word>WITH</Word>
+		</Keywords>
+
+		<!-- Digits -->
+		<Rule foreground="DarkBlue">
+			\b0[xX][0-9a-fA-F]+  # hex number
+			|    \b
+			(    \d+(\.[0-9]+)?   #number with optional floating point
+			|    \.[0-9]+         #or just starting with floating point
+			)
+			([eE][+-]?[0-9]+)? # optional exponent
+		</Rule>
+	</RuleSet>
+</SyntaxDefinition>
