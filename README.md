@@ -8,13 +8,15 @@ Think of it like SQLite for graph databases. There were some efforts to build so
 
 #### Why it exists?
 I just need embedded Graph Database Solution that supports Cypher Language.
-Graph DBMS is a perfect solution for some gamedev's ai-related stuff (Procedural Behaviour Design, Perception and context awareness storage), but every solution need a server. Imagine that in order to play your game you must install Neo4J's server in the first place, or every time your npc makes a decision it queries Azure Cloud to check how much he likes pizza. It's unreliable and forces you to host a game server for the entirety of a game's lifetime even though your game is singleplayer. Sounds stupid? Well, ask EA about Simcity 2013 - they thought it's a great idea! But really, Graph DBMS has other use cases. ![Watch this video to know more about Graph DBMS](https://www.youtube.com/watch?v=GekQqFZm7mA&t=885s)
+Graph DBMS is a perfect solution for some gamedev ai-related stuff (Procedural Behaviour Design, Perception and context awareness storage), but every solution needs a server. Imagine that in order to play your game you must install Neo4J's server in the first place, or every time your npc makes a decision it queries Azure Cloud to check how much he likes pizza. It's unreliable and forces you to host a game server for the entirety of a game's lifetime even though your game is singleplayer. Sounds stupid? Well, ask EA about Simcity 2013 - they thought it's a great idea! But really, Graph DBMS has other use cases. [Watch this video to know more about Graph DBMS](https://www.youtube.com/watch?v=GekQqFZm7mA&t=885s)
 
 #### DB Debugger
-
+![DB Debugger Screenshot](/screenshots/Debugger.png)
+DB Debugger is a companion app currently used for interaction with database. It allows for CRUD operations on the database to test its' functionalities. 
+The app is still in development.
 
 #### Progress??
-Below you'll find a list of features that will be included in the 1st milestone of SliccDB:
+Below you'll find a list of features that will be included in the 1st milestone release of SliccDB:
 - [x] Basic Structures (Relations, Nodes)
 - [x] Serialization (Reading and Writing)
 - [x] Basic Debugger App (Ability to add, remove, edit nodes and relations)
@@ -23,3 +25,6 @@ Below you'll find a list of features that will be included in the 1st milestone 
 - [ ] MATCH Clause
 - [ ] RETURN Clause
 - [ ] MERGE Clause
+
+#### Can I help?
+Of course! Any help with the Cypher Interpreter will be appreciated. Currently I use [Raiload Diagrams](https://s3.amazonaws.com/artifacts.opencypher.org/M16/railroad/Cypher.html) from official OpenCypher website to look for lexems and then for every pattern I walk the tree and extract what is needed. This architecture while simple, is not optimal and it would be far better if I were to build some kind of a command object inside every block and based on that operated on the database. 
