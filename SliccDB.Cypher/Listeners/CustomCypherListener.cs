@@ -4,17 +4,26 @@ using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using SliccDB.Core;
-using SliccDB.Cypher.Model;
+using SliccDB.Cypher.Analyzers;
+using SliccDB.Cypher.Collection;
+using SliccDB.Cypher.Extensions;
 using SliccDB.Serialization;
 
-namespace SliccDB.Cypher.Visitors
+namespace SliccDB.Cypher.Listeners
 {
     public class CustomCypherListener : CypherBaseListener
     {
 
         public DatabaseConnection CurrentDatabaseConnection;
-        private Dictionary<string, object> _variableBuffer = new Dictionary<string, object>();
+        private VariableBuffer _variableBuffer = new VariableBuffer();
         public QueryResult CypherQueryResult { get; set; }
+        private PatternPartAnalyzer _patternPartAnalyzer = new PatternPartAnalyzer();
+
+        public CustomCypherListener() : base()
+        {
+
+        }
+
         public override void EnterOC_Cypher(CypherParser.OC_CypherContext context)
         {
             Console.WriteLine("Entered Cypher");
@@ -120,11 +129,53 @@ namespace SliccDB.Cypher.Visitors
 
         public override void EnterOC_Match(CypherParser.OC_MatchContext context)
         {
+            Console.WriteLine("Entered Match");
+            if (context.oC_Pattern() != null)
+            {
+                Console.WriteLine("Found Pattern");
+                context.oC_Pattern().oC_PatternPart().ToList().ForEach(a =>
+                {
+                    var patternModel = _patternPartAnalyzer.Analyze(a);
+                    if (patternModel.Properties.Count == 0 && patternModel.Labels.Count == 0 &&
+                        !string.IsNullOrEmpty(patternModel.VariableName))
+                    {
+                        Console.WriteLine("Any Match");
+
+                        CurrentDatabaseConnection.Nodes.ToList().ForEach(node =>
+                        {
+                            _variableBuffer.Add(patternModel.VariableName, node);
+                        });
+                        CurrentDatabaseConnection.Relations.ToList().ForEach(relation =>
+                        {
+                            _variableBuffer.Add(patternModel.VariableName, relation);
+                        });
+
+                    }
+
+
+                    var foundNodes =  CurrentDatabaseConnection.QueryNodes(nodes =>
+                    {
+                        var match = nodes.AsParallel().Where(x => x.Labels.Any(s => patternModel.Labels.Contains(s)) && patternModel.Properties.HasSameKeysValues(x.Properties));
+                        return match.ToList();
+                    });
+
+                    foreach (var foundNode in foundNodes)
+                    {
+                 
+                        //CypherQueryResult.Nodes.Add(foundNode);
+                        if (!string.IsNullOrEmpty(patternModel.VariableName)) _variableBuffer.Add(patternModel.VariableName, foundNode);
+                    }
+                });
+
+            }
+
             base.EnterOC_Match(context);
         }
 
         public override void ExitOC_Match(CypherParser.OC_MatchContext context)
         {
+            Console.WriteLine("Exited Match");
+
             base.ExitOC_Match(context);
         }
 
@@ -166,127 +217,12 @@ namespace SliccDB.Cypher.Visitors
 
             context.oC_Pattern().oC_PatternPart().ToList().ForEach(a =>
             {
-                Console.WriteLine("Found Pattern Part" + a.GetText());
-                var nodeProperties = new Dictionary<string, string>();
-                var nodeLabels = new HashSet<string>();
-                var nodeBufferName = "";
+                var model = _patternPartAnalyzer.Analyze(a);
 
-                if (!a.oC_AnonymousPatternPart().IsEmpty)
+                var node = CurrentDatabaseConnection.CreateNode(model.Properties, model.Labels);
+                if (!string.IsNullOrEmpty(model.VariableName))
                 {
-                    Console.WriteLine("Found Anonymous Pattern Part" + a.oC_AnonymousPatternPart().ToString());
-                    if (!a.oC_AnonymousPatternPart().oC_PatternElement().IsEmpty)
-                    {
-                        var patternElement = a.oC_AnonymousPatternPart().oC_PatternElement();
-
-
-
-                        if (!patternElement.oC_NodePattern().IsEmpty)
-                        {
-                            Console.WriteLine("Found Node Pattern");
-
-                            var nodePattern = patternElement.oC_NodePattern();
-
-
-                            if (nodePattern.oC_Variable() != null)
-                            {
-                                var variable = nodePattern.oC_Variable();
-
-                                Console.WriteLine("Found Variable Definition "+variable.GetText());
-                                if (variable.oC_SymbolicName() != null)
-                                {
-                                    Console.WriteLine("Found Variable Symbolic Name " + variable.oC_SymbolicName().GetText());
-                                    nodeBufferName = variable.oC_SymbolicName().GetText();
-                                }
-
-                            }
-
-                            if (!nodePattern.oC_NodeLabels().IsEmpty)
-                            {
-                                Console.WriteLine("Found Node Labels");
-                                nodePattern.oC_NodeLabels().oC_NodeLabel().ToList().ForEach(nodeLabel =>
-                                {
-                                    Console.WriteLine("Found Node Label Definition: "+nodeLabel.GetText());
-                                    if (!nodeLabel.oC_LabelName().IsEmpty)
-                                    {
-                                        Console.WriteLine("Found Node Label Name: " + nodeLabel.oC_LabelName().GetText());
-                                        nodeLabels.Add(nodeLabel.oC_LabelName().GetText());
-                                    }
-                                });
-                            }
-
-                            if (nodePattern.oC_Properties() != null)
-                            {
-                                Console.WriteLine("Found Properties");
-
-                                var properties = nodePattern.oC_Properties();
-
-
-                                if (properties.oC_MapLiteral() != null)
-                                {
-                                    Console.WriteLine("Found Map Literals "+ properties.oC_MapLiteral().GetText());
-                                    var propertyKeys = properties.oC_MapLiteral().oC_PropertyKeyName();
-                                    var propertyValues = properties.oC_MapLiteral().oC_Expression();
-                                    for (int i = 0; i < properties.oC_MapLiteral().oC_PropertyKeyName().Length; i++)
-                                    {
-                                        nodeProperties.Add(propertyKeys[i].GetText(), propertyValues[i].GetText().Replace("'", ""));
-                                    }
-
-
-                                    if (properties.oC_MapLiteral().oC_PropertyKeyName() != null)
-                                    {
-                                        foreach (var ocPropertyKeyNameContext in properties.oC_MapLiteral().oC_PropertyKeyName())
-                                        {
-                                            Console.WriteLine("Found Map Literal "+ocPropertyKeyNameContext.GetText());
-                                            
-                                        }
-                                    }
-
-                                    if (properties.oC_MapLiteral().oC_Expression() != null)
-                                    {
-                                        var expression = properties.oC_MapLiteral().oC_Expression();
-
-                                        foreach (var ocExpressionContext in expression)
-                                        {
-                                            Console.WriteLine("Found Expression "+ocExpressionContext.GetText());
-                                        }
-                                    }
-
-                                }
-                            }
-
-
-                           
-                        }
-                        if (a.oC_Variable() != null)
-                        {
-                            Console.WriteLine("Variable Definition " + a.oC_Variable().GetText());
-                            if (!a.oC_Variable().oC_SymbolicName().IsEmpty)
-                            {
-                                Console.WriteLine("Symbolic Name " + a.oC_Variable().oC_SymbolicName().GetText());
-
-                                //var.Name = a.oC_Variable().oC_SymbolicName().GetText();
-
-                            }
-
-                        }
-
-                    }
-                }
-                if (a.oC_Variable() != null)
-                {
-                    if (a.oC_Variable().oC_SymbolicName() != null)
-                    {
-                        Console.WriteLine("Variable Definition " + a.oC_Variable().oC_SymbolicName().GetText());
-                       // var.Name = a.oC_Variable().oC_SymbolicName().GetText(); 
-                    }
-                 
-                }
-
-                var node = CurrentDatabaseConnection.CreateNode(nodeProperties, nodeLabels);
-                CypherQueryResult.Nodes.Add(node);
-                if (!string.IsNullOrEmpty(nodeBufferName))
-                {
-                    _variableBuffer.Add(nodeBufferName, node);
+                    _variableBuffer.Add(model.VariableName, node);
                 }
             });
 
@@ -402,11 +338,67 @@ namespace SliccDB.Cypher.Visitors
 
         public override void EnterOC_Return(CypherParser.OC_ReturnContext context)
         {
-            base.EnterOC_Return(context);
+            Console.WriteLine("Entered Return "+context.GetText());
+            if (context.oC_ProjectionBody() != null)
+            {
+                Console.WriteLine("Entered Projection Body "+context.oC_ProjectionBody().GetText() );
+
+                if (context.oC_ProjectionBody().oC_ProjectionItems().oC_ProjectionItem() != null)
+                {
+                    Console.WriteLine("Entered Projection Body " + context.oC_ProjectionBody().GetText());
+                    context.oC_ProjectionBody().oC_ProjectionItems().oC_ProjectionItem().ToList().ForEach(item =>
+                    {
+                        Console.WriteLine("entered projection items "+item.GetText());
+                        if (item.oC_Variable() != null)
+                        {
+                            Console.WriteLine("entered ocvariable " + item.oC_Variable().GetText());
+
+                            var variableList = _variableBuffer.Get(item.oC_Variable().oC_SymbolicName().GetText());
+
+                            foreach (var o in variableList)
+                            {
+                                Console.WriteLine($"Found variable {item.oC_Variable().oC_SymbolicName().GetText()}: " + o.GetType().Name);
+
+                                if (o is Node node)
+                                    CypherQueryResult.Nodes.Add(node);
+
+                                if(o is Relation relation)
+                                    CypherQueryResult.Relations.Add(relation);
+
+                            }
+                        }
+
+                        if (item.oC_Expression() != null)
+                        {
+                            Console.WriteLine("entered oC_Expression " + item.oC_Expression().GetText());
+
+                            var variableList = _variableBuffer.Get(item.oC_Expression().GetText());
+
+                            foreach (var o in variableList)
+                            {
+                                Console.WriteLine($"Found variable {item.oC_Expression().GetText()}: " + o.GetType().Name);
+
+                                if (o is Node node)
+                                    CypherQueryResult.Nodes.Add(node);
+
+                                if (o is Relation relation)
+                                    CypherQueryResult.Relations.Add(relation);
+
+                            }
+                        }
+                    });
+                }
+
+            }
+
+
         }
 
         public override void ExitOC_Return(CypherParser.OC_ReturnContext context)
         {
+            Console.WriteLine("Exited Return");
+
+
             base.ExitOC_Return(context);
         }
 

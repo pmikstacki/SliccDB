@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using SliccDB.Core;
-using SliccDB.Cypher.Visitors;
+using SliccDB.Cypher.Listeners;
 using SliccDB.Serialization;
 
 namespace SliccDB.Cypher
