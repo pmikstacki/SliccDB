@@ -58,7 +58,7 @@ var selectedEdge = connection.QueryRelations(x => x.Where(x => x.RelationName ==
 Console.WriteLine(selectedEdge.Labels.Count);
 ```
 ###### Cypher Interpreter
-Although it is not fully implemented, you can use some of cypher commands. For detailed info about current features see [Progress??](####Progress)
+Although it is not fully implemented, you can use some of cypher commands. For detailed info about current features see [Progress](#Progress)
 
 ```Csharp
 CypherInterpreter interpreter = new CypherInterpreter(connection);
