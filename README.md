@@ -23,6 +23,7 @@ Below you'll find a list of features that will be included in the 1st milestone 
 - [x] Antlr-Generated OpenCypher Parser, Lexer and ListenerBase
 - [x] CREATE Clause
 - [x] MATCH Clause
+- [ ] WHERE Clause
 - [x] RETURN Clause
 - [ ] MERGE Clause
 
