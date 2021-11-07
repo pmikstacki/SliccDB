@@ -2,7 +2,7 @@
 ![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=c-sharp&logoColor=white) ![.Net](https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white) ![Visual Studio](https://img.shields.io/badge/Visual%20Studio-5C2D91.svg?style=for-the-badge&logo=visual-studio&logoColor=white)
 ![Version](https://img.shields.io/badge/Version-0.0.1-brightgreen?style=for-the-badge)
 ### Light Embedded Graph Database for .net with support (in progress) for OpenCypher Query Language 
-![image](/SliccDBDebugger/Res/SLICC_500.png) 
+![image](/SliccDB.Explorer/Res/SLICC_500.png) 
 #### What is it?
 Think of it like SQLite for graph databases. There were some efforts to build something like this (such as Graph Engine) but Microsoft decided to abandon all of their graph database related projects. Be aware that I have no intention to make this some sort of Neo4J .net Clone. It will be not fully compliant with features of mentioned database. I intend on integrating Cypher, because it is an ISO standard GQL (Graph Query Language). More info and resources about cypher can be found on their site (http://opencypher.org/) 
 
