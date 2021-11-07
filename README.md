@@ -47,21 +47,21 @@ You can query nodes and relations as you would any collection (With Linq).
 ###### Query Nodes
 
 ```Csharp
-var selectedNode = _databaseConnection.QueryNodes(x => x.Where(x => x.Properties["Name"] == "Steve").ToList()).First();
+var selectedNode = connection.QueryNodes(x => x.Where(x => x.Properties["Name"] == "Steve").ToList()).First();
 Console.WriteLine(selectedNode.Labels.Count);
 ```
 
 ###### Query Relations
 
 ```Csharp
-var selectedEdge = _databaseConnection.QueryRelations(x => x.Where(x => x.RelationName == s).ToList()).First();
+var selectedEdge = connection.QueryRelations(x => x.Where(x => x.RelationName == s).ToList()).First();
 Console.WriteLine(selectedEdge.Labels.Count);
 ```
 ###### Cypher Interpreter
 Although it is not fully implemented, you can use some of cypher commands. For detailed info about current features see [Progress??](####Progress)
 
 ```Csharp
-CypherInterpreter interpreter = new CypherInterpreter(_databaseConnection);
+CypherInterpreter interpreter = new CypherInterpreter(connection);
 Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\temp\\");
 File.WriteAllText(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\temp\\cypherstring.cyp", "MATCH(n) RETURN n";
 var result = interpreter.Interpret(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\temp\\cypherstring.cyp");           
