@@ -8,7 +8,7 @@ Think of it like SQLite for graph databases. There were some efforts to build so
 
 #### Why it exists?
 I just need embedded Graph Database Solution that supports Cypher Language.
-Graph DBMS is a perfect solution for some gamedev ai-related stuff (Procedural Behaviour Design, Perception and context awareness storage), but every solution needs a server. Imagine that in order to play your game you must install Neo4J's server in the first place, or every time your npc makes a decision it queries Azure Cloud to check how much he likes pizza. It's unreliable and forces you to host a game server for the entirety of a game's lifetime even though your game is singleplayer. Sounds stupid? Well, ask EA about Simcity 2013 - they thought it's a great idea! But really, Graph DBMS has other use cases. [Watch this video to know more about Graph DBMS](https://www.youtube.com/watch?v=GekQqFZm7mA&t=885s)
+Graph DBMS is a perfect solution for some gamedev ai-related stuff (Procedural Behaviour Design, Perception and context awareness storage), but every solution needs a server. Imagine that in order to play your game you must install Neo4J's server in the first place, or every time your npc makes a decision it queries Azure Cloud to check how much he likes pizza. It's unreliable and forces you to host a game server for the entirety of a game's lifetime even though your game is singleplayer. Sounds stupid? Well, ask EA about Simcity 2013 - they thought it's a great idea! But really, Graph DBMS has other use cases. [Watch this video to know more about Graph DBMS](https://www.youtube.com/watch?v=GekQqFZm7mA)
 
 #### DB Explorer
 ![DB Explorer Screenshot](/screenshots/Explorer.png)\
