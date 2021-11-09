@@ -7,6 +7,7 @@ using SliccDB.Core;
 using SliccDB.Cypher.Analyzers;
 using SliccDB.Cypher.Collection;
 using SliccDB.Cypher.Extensions;
+using SliccDB.Cypher.Utility;
 using SliccDB.Serialization;
 
 namespace SliccDB.Cypher.Listeners
@@ -27,6 +28,10 @@ namespace SliccDB.Cypher.Listeners
         public override void EnterOC_Cypher(CypherParser.OC_CypherContext context)
         {
             Console.WriteLine("Entered Cypher");
+            Console.WriteLine("--- Start Parse Tree ---");
+            ParseTreeHelper.PrintContext(context, 0);
+            Console.WriteLine("--- End Parse Tree ---");
+
             base.EnterOC_Cypher(context);
         }
 
@@ -169,7 +174,20 @@ namespace SliccDB.Cypher.Listeners
 
             }
 
-            base.EnterOC_Match(context);
+            if (context.oC_Where() != null)
+            {
+                var where = context.oC_Where();
+                if (where.oC_Expression() != null)
+                {
+                    
+                    Console.WriteLine("Found Where Expression" +where.oC_Expression().GetText());
+                    ExpressionAnalyzer exprAnal = new ExpressionAnalyzer();
+                    exprAnal.Analyze(where.oC_Expression());
+
+                }
+            }
+
+                base.EnterOC_Match(context);
         }
 
         public override void ExitOC_Match(CypherParser.OC_MatchContext context)
@@ -371,12 +389,15 @@ namespace SliccDB.Cypher.Listeners
                         if (item.oC_Expression() != null)
                         {
                             Console.WriteLine("entered oC_Expression " + item.oC_Expression().GetText());
+                            ExpressionAnalyzer anal = new ExpressionAnalyzer();
+                            anal.Analyze(item.oC_Expression());
+
 
                             var variableList = _variableBuffer.Get(item.oC_Expression().GetText());
 
                             foreach (var o in variableList)
                             {
-                                Console.WriteLine($"Found variable {item.oC_Expression().GetText()}: " + o.GetType().Name);
+                                Console.WriteLine($"Found variable \"{item.oC_Expression().GetText()}\" : " + o.GetType().Name);
 
                                 if (o is Node node)
                                     CypherQueryResult.Nodes.Add(node);

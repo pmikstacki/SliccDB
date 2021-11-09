@@ -91,10 +91,13 @@ namespace SliccDB.Cypher.Analyzers
                                 if (properties.oC_MapLiteral().oC_Expression() != null)
                                 {
                                     var expression = properties.oC_MapLiteral().oC_Expression();
+                                    ExpressionAnalyzer anal = new ExpressionAnalyzer();
 
                                     foreach (var ocExpressionContext in expression)
                                     {
                                         Console.WriteLine("Found Expression " + ocExpressionContext.GetText());
+                                        anal.Analyze(ocExpressionContext);
+
                                     }
                                 }
 
