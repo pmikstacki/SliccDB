@@ -6,6 +6,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -75,6 +75,7 @@
             <Grid Grid.Row="1" Background="{StaticResource ContentBackground}" IsEnabled="{Binding IsDatabaseConnected}">
                 <utility:BindableAvalonEditor x:Name="CypherInput" Foreground="White" Text="{Binding CypherQuery}" Background="{StaticResource ContentBackground}" SyntaxHighlighting="{Binding HighlightForCypher}" ShowLineNumbers="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Margin="0,0,115,0" />
                 <syncfusion:ButtonAdv Name="ExecuteCypher" HorizontalAlignment="Right" Width="90"  Margin="0,0,10,0" BorderBrush="{x:Null}" Height="29" VerticalAlignment="Center" IsDefault="True" Background="#FF2D5AAA" Label="Execute" LargeIcon="/Res/play-outline.png" SmallIcon="/Res/play-outline.png" />
+                <CheckBox Content="Debug Tree" Margin="0,74,10,0" HorizontalAlignment="Right" Width="90" x:Name="DebugTree"></CheckBox>
             </Grid>
         </Grid>
         <Border Grid.Column="1" BorderBrush="#FF292827"  Width="300" HorizontalAlignment="Right" BorderThickness="2, 0 ,0 ,0" Visibility="{Binding Path=ShowInfoPanel, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True" >

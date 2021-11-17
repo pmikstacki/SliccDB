@@ -11,6 +11,7 @@ using Microsoft.Win32;
 using SliccDB.Core;
 using SliccDB.Cypher;
 using SliccDB.Explorer.Model;
+using SliccDB.Explorer.Utility;
 using SliccDB.Explorer.Views;
 using SliccDB.Serialization;
 using Syncfusion.Linq;
@@ -22,6 +23,19 @@ namespace SliccDB.Explorer.ViewModels
     public class MainWindowViewModel : PropertyChangedBase
     {
         #region Properties
+
+        bool debugTree;
+
+        public bool DebugTree
+        {
+            get { return debugTree; }
+            set
+            {
+                debugTree = value;
+                NotifyOfPropertyChange(() => DebugTree);
+            }
+
+        }
 
         ObservableCollection<QueryResultsViewModel> queryResults = new ObservableCollection<QueryResultsViewModel>();
 
@@ -213,6 +227,10 @@ namespace SliccDB.Explorer.ViewModels
             File.WriteAllText(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\temp\\cypherstring.txt", CypherQuery);
             var result = interpreter.Interpret(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\temp\\cypherstring.txt");
             QueryResults.Add(new QueryResultsViewModel(result));
+            if (DebugTree)
+            {
+                new DebugParseTreeVisual(interpreter.debugTreeInfo).Show();
+            }
             GenerateGraph();
         }
 
@@ -264,10 +282,13 @@ namespace SliccDB.Explorer.ViewModels
                 SelectedHash = s;
                 if (b)
                 {
-                    var selectedNode = _databaseConnection.QueryNodes(x => x.Where(x => x.Hash == s).ToList()).First();
-                    SelectedTags = FunctionalExtensions.ToObservableCollection(selectedNode.Labels);
+                    var selectedNode = _databaseConnection.QueryNodes(x => x.Where(x => x.Hash == s).ToList()).FirstOrDefault();
+                    if (selectedNode != null)
+                    {
+                        SelectedTags = FunctionalExtensions.ToObservableCollection(selectedNode.Labels);
 
-                    Properties = CollectionExtensions.DictionaryToObservableCollection(selectedNode.Properties);
+                        Properties = CollectionExtensions.DictionaryToObservableCollection(selectedNode.Properties);
+                    }
 
 
                 }
