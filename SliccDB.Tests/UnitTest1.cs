@@ -1,13 +1,18 @@
 using NUnit.Framework;
 using SliccDB.Core;
 using SliccDB.Serialization;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace SliccDB.Tests
 {
     public class Tests
     {        
+        private const string fileName = "sample";
+
         public Node NodeOne { get; set; }
 
         public Node NodeTwo { get; set; }
@@ -17,7 +22,7 @@ namespace SliccDB.Tests
         [SetUp]
         public void SetupDatabase()
         {
-            Connection = new DatabaseConnection("filename");
+            Setup();
         }
 
         [Test]
@@ -60,6 +65,27 @@ namespace SliccDB.Tests
             Assert.IsTrue(selectedEdge.Labels.Count > 0, "Edge not found");
         }
 
+        [Test]
+        public void SaveDatabase()
+        {
+            int nodes = 0;
+            int relations = 0;
+
+            CreateNodes();
+            CreateRelations();
+
+            nodes = Connection.Nodes.Count;
+            relations = Connection.Relations.Count;
+
+            Connection.SaveDatabase();
+            Connection.CloseDatabase();
+
+            Setup();
+
+            Assert.IsTrue(Connection.Nodes.Count.Equals(nodes), "Saved nodes are different.");
+            Assert.IsTrue(Connection.Relations.Count.Equals(relations), "Saved relations are different.");
+        }
+
         private void CreateRelations()
         {
             var properties = new Dictionary<string, string>();
@@ -80,6 +106,42 @@ namespace SliccDB.Tests
                 new Dictionary<string, string>() { { "Name", "Steve" } },
                 new HashSet<string>() { "Person" }
                 );
+        }
+
+        private void Setup()
+        {
+            string folderPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\data\"));
+            string filePath = Path.Combine(folderPath, fileName);
+
+            if (System.IO.File.Exists(filePath))
+            {
+                Connection = new DatabaseConnection(filePath);
+            }
+            else
+            {
+                filePath = Path.Combine(folderPath, GenerateName(8));
+                Connection = new DatabaseConnection(filePath);
+            }
+        }
+
+        public static string GenerateName(int len)
+        {
+            Random r = new Random();
+            string[] consonants = { "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "l", "n", "p", "q", "r", "s", "sh", "zh", "t", "v", "w", "x" };
+            string[] vowels = { "a", "e", "i", "o", "u", "ae", "y" };
+            string Name = "";
+            Name += consonants[r.Next(consonants.Length)].ToUpper();
+            Name += vowels[r.Next(vowels.Length)];
+            int b = 2;
+            while (b < len)
+            {
+                Name += consonants[r.Next(consonants.Length)];
+                b++;
+                Name += vowels[r.Next(vowels.Length)];
+                b++;
+            }
+
+            return Name;
         }
     }
 }
