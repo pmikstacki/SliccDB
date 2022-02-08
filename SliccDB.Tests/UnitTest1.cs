@@ -78,7 +78,7 @@ namespace SliccDB.Tests
             relations = Connection.Relations.Count;
 
             Connection.SaveDatabase();
-
+            Connection.CloseDatabase();
             Setup();
 
             Assert.IsTrue(Connection.Nodes.Count.Equals(nodes), "Saved nodes are different.");
