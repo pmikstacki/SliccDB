@@ -78,6 +78,15 @@ namespace SliccDB.Serialization
             }
         }
 
+        public void CloseDatabase()
+        {
+            if (Database != null && ConnectionStatus == ConnectionStatus.Connected)
+            {
+                this.ConnectionStatus = ConnectionStatus.NotConnected;
+                Database.Dispose();
+            }
+        }
+
         public void ClearDatabase()
         {
             Nodes.Clear();

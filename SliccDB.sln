@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SliccDB.Explorer", "SliccDB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SliccDB.Cypher", "SliccDB.Cypher\SliccDB.Cypher.csproj", "{641D6334-23DB-4401-AE84-7C36EB5E9A78}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SliccDB.Tests", "SliccDB.Tests\SliccDB.Tests.csproj", "{600AADB3-6D06-42FE-86EC-5E7E54CA2C59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{641D6334-23DB-4401-AE84-7C36EB5E9A78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{641D6334-23DB-4401-AE84-7C36EB5E9A78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{641D6334-23DB-4401-AE84-7C36EB5E9A78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{600AADB3-6D06-42FE-86EC-5E7E54CA2C59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{600AADB3-6D06-42FE-86EC-5E7E54CA2C59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{600AADB3-6D06-42FE-86EC-5E7E54CA2C59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{600AADB3-6D06-42FE-86EC-5E7E54CA2C59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
