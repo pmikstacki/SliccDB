@@ -15,6 +15,18 @@ namespace SliccDB.Cypher.Analyzers
             Console.WriteLine("Entered Where Analyzer");
 
             var expressionContext = context as CypherParser.OC_ExpressionContext;
+            if (expressionContext.oC_OrExpression() != null)
+            {
+                //...
+                if (expressionContext.oC_OrExpression().oC_XorExpression() != null)
+                {
+                    if (expressionContext.oC_OrExpression().oC_XorExpression() != null)
+                    {
+                        //....
+                    }
+                }
+            }
+
             if (expressionContext != null)
             {
                 var orExpressionChildren =

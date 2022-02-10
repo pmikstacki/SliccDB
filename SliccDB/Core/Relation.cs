@@ -8,29 +8,22 @@ namespace SliccDB.Core
     /// Edge of the graph
     /// </summary>
     [MessagePackObject]
-    public class Relation : IComparable<Relation>, IEquatable<Relation>
+    public class Relation : GraphEntity, IComparable<Relation>, IEquatable<Relation>
     {
-        /// <summary>
-        /// Name of a relation
-        /// </summary>
-        [Key(0)]
-        public virtual string RelationName { get; set; }
-        /// <summary>
-        /// Properties contained in a node
-        /// </summary>
-        [Key(1)]
-        public virtual Dictionary<string, string> Properties { get; set; }
-        /// <summary>
-        /// Name of a node. Keep it consistent within a database to make querying easier
-        /// </summary>
         [Key(2)]
-        public virtual HashSet<string> Labels { get; set; }
+        public virtual string RelationName { get; set; }
         [Key(3)]
         public virtual string SourceHash { get; set; }
         [Key(4)]
         public virtual string TargetHash { get; set; }
         [Key(5)]
         public virtual string Hash { get; set; }
+
+        public Relation()
+        {
+            Hash = Guid.NewGuid().ToString();
+
+        }
 
         public Relation(string relationName, Dictionary<string, string> properties, HashSet<string> labels, string sourceHash, string targetHash)
         {
