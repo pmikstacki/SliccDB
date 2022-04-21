@@ -33,7 +33,6 @@ namespace SliccDB.Serialization
                 }
                 catch(Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
                     Database = new Database();
                     this.ConnectionStatus = ConnectionStatus.Connected;
 
@@ -75,7 +74,7 @@ namespace SliccDB.Serialization
             SaveDatabase();
         }
 
-        public int Remove(GraphEntity entity)
+        public int Delete(GraphEntity entity)
         {
             var nodes = Nodes.RemoveWhere(n => n.Hash == entity.Hash);
             var relationsLinkedWithNodes = Relations.RemoveWhere(r => r.SourceHash == entity.Hash || r.TargetHash == entity.Hash);
