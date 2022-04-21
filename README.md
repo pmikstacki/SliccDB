@@ -58,16 +58,6 @@ var selectedNode = Connection.Nodes().Properties("Name".Value("Tom")).Labels("Pe
 var queriedRelation = Connection.Relations().Properties("Property".Value("PropertyValue"))
                 .Labels("RelationLabel");
 ```
-###### Cypher Interpreter
-Although it is not fully implemented, you can use some of cypher commands. For detailed info about current features see [Progress](#Progress)
-
-```Csharp
-CypherInterpreter interpreter = new CypherInterpreter(connection);
-Directory.CreateDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\temp\\");
-File.WriteAllText(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\temp\\cypherstring.cyp", "MATCH(n) RETURN n";
-var result = interpreter.Interpret(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\temp\\cypherstring.cyp");           
-```
-Result is of type "QueryResult". It returns node and relationship collection.
 
 #### Why it exists?
 I just need embedded Graph Database Solution that supports Cypher Language.
