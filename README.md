@@ -72,13 +72,9 @@ The app is still in development.
 Below you'll find a list of features that will be included in the 1st milestone release of SliccDB:
 - [x] Basic Structures (Relations, Nodes)
 - [x] Serialization (Reading and Writing)
+- [x] Queries
 - [x] Basic Debugger App (Ability to add, remove, edit nodes and relations)
-- [x] Antlr-Generated OpenCypher Parser, Lexer and ListenerBase
-- [x] CREATE Clause
-- [x] MATCH Clause
-- [ ] WHERE Clause
-- [x] RETURN Clause
-- [ ] MERGE Clause
+- [ ] ORM (Object Relational Mapper) for Nodes
 
 #### Can I help?
 Of course! Any help with the Cypher Interpreter will be appreciated. Currently I use [Raiload Diagrams](https://s3.amazonaws.com/artifacts.opencypher.org/M16/railroad/Cypher.html) from official OpenCypher website to look for lexems and then for every pattern I walk the tree and extract what is needed. This architecture while simple, is not optimal and it would be far better if I were to build some kind of a command object inside every block and based on that operated on the database. 
