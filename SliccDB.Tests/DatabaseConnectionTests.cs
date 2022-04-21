@@ -113,7 +113,7 @@ namespace SliccDB.Tests
         public void TestNodeUpdateTest()
         {
 
-            var node = Connection.QueryNodes(x => x.Where(x => x.Properties["Name"] == "Steve").ToList()).First();
+            var node = Connection.Nodes().Properties("Name".Value("Steve")).First();
             node.Properties["Name"] = "Steve2";
 
             Connection.Update(node);
@@ -127,7 +127,7 @@ namespace SliccDB.Tests
         public void RelationUpdateTest()
         {
 
-            var relation = Connection.QueryRelations(x => x.Where(x => x.RelationName == "Likes").ToList()).First();
+            var relation = Connection.Relations("Likes").ToList().First();
             relation.Properties["How Much"] = "Not So Much";
             relation.Labels.Add("Love Hate Relationship");
 
