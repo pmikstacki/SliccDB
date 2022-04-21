@@ -11,8 +11,4 @@
     <PackageReference Include="MessagePack" Version="2.3.85" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Fluent\" />
-  </ItemGroup>
-
 </Project>

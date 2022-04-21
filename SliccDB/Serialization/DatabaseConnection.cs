@@ -75,21 +75,14 @@ namespace SliccDB.Serialization
             SaveDatabase();
         }
 
-        public void Remove(GraphEntity entity)
+        public int Remove(GraphEntity entity)
         {
-            if (entity is Node node)
-            {
-                Nodes.RemoveWhere(n => n.Hash == node.Hash);
-            }
-            else if (entity is Relation relation)
-            {
-                Nodes.RemoveWhere(r => r.Hash == relation.Hash);
-            }
-            else
-            {
-                throw new InvalidOperationException("Invalid entity type");
-            }
+            var nodes = Nodes.RemoveWhere(n => n.Hash == entity.Hash);
+            var relationsLinkedWithNodes = Relations.RemoveWhere(r => r.SourceHash == entity.Hash || r.TargetHash == entity.Hash);
+            var relations = Relations.RemoveWhere(r => r.Hash == entity.Hash);
+
             SaveDatabase();
+            return nodes + relationsLinkedWithNodes + relations;
         }
 
         public IEnumerable<Node> FindNodesWithRelationSource(string relationName)
