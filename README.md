@@ -5,7 +5,9 @@
 <img src="/SliccDB.Explorer/Res/SLICC_500.png" width="200" height="200" align="right">
 
 #### What is it?
-Think of it like SQLite for graph databases. There were some efforts to build something like this (such as Graph Engine) but Microsoft decided to abandon all of their graph database related projects. Be aware that I have no intention to make this some sort of Neo4J .net Clone. It will be not fully compliant with features of mentioned database. I intend on integrating Cypher, because it is an ISO standard GQL (Graph Query Language). More info and resources about cypher can be found on their site (http://opencypher.org/) 
+Think of it like SQLite for graph databases. There were some efforts to build something like this (such as Graph Engine) but Microsoft decided to abandon all of their graph database related projects. Be aware that I have no intention to make this some sort of Neo4J .net Clone. It will be not fully compliant with features of mentioned database. ~~I intend on integrating Cypher, because it is an ISO standard GQL (Graph Query Language). More info and resources about cypher can be found on their site (http://opencypher.org/)~~
+##### Update regarding Cypher
+I've decided to focus on extending and optimizing C# <-> database interaction. Cypher implementation is under consideration.
 
 #### Examples
 Here are some simple examples:
@@ -47,15 +49,14 @@ You can query nodes and relations as you would any collection (With Linq).
 ###### Query Nodes
 
 ```Csharp
-var selectedNode = connection.QueryNodes(x => x.Where(x => x.Properties["Name"] == "Steve").ToList()).First();
-Console.WriteLine(selectedNode.Labels.Count);
+var selectedNode = Connection.Nodes().Properties("Name".Value("Tom")).Labels("Person").FirstOrDefault();
 ```
 
 ###### Query Relations
 
 ```Csharp
-var selectedEdge = connection.QueryRelations(x => x.Where(x => x.RelationName == s).ToList()).First();
-Console.WriteLine(selectedEdge.Labels.Count);
+var queriedRelation = Connection.Relations().Properties("Property".Value("PropertyValue"))
+                .Labels("RelationLabel");
 ```
 ###### Cypher Interpreter
 Although it is not fully implemented, you can use some of cypher commands. For detailed info about current features see [Progress](#Progress)
