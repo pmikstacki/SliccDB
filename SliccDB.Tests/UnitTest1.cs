@@ -119,7 +119,7 @@ namespace SliccDB.Tests
             }
             else
             {
-                filePath = Path.Combine(folderPath, GenerateName(8));
+                filePath = Path.Combine(folderPath, GenerateName(8) + ".sliccdb");
                 Connection = new DatabaseConnection(filePath);
             }
         }

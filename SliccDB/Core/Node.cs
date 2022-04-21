@@ -12,12 +12,6 @@ namespace SliccDB.Core
     [MessagePackObject]
     public class Node : GraphEntity
     {
-        /// <summary>
-        /// Hash by which the Nodes are identified
-        /// </summary>
-        [Key(2)]
-        public virtual string Hash { get; set; }
-
         public Node()
         {
             Hash = Guid.NewGuid().ToString();

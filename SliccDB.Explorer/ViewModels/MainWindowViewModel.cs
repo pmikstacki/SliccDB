@@ -237,6 +237,21 @@ namespace SliccDB.Explorer.ViewModels
         public void OpenDatabase()
         {
             OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "SliccDB Database (*.sliccdb)|*.sliccdb";
+            if (ofd.ShowDialog() == true)
+            {
+                _databaseConnection = new DatabaseConnection(ofd.FileName);
+            }
+
+            GenerateGraph();
+
+            if (_databaseConnection.ConnectionStatus == ConnectionStatus.Connected) IsDatabaseConnected = true;
+        }
+
+        public void NewDatabase()
+        {
+            SaveFileDialog ofd = new SaveFileDialog();
+            ofd.Filter = "SliccDB Database (*.sliccdb)|*.sliccdb";
             if (ofd.ShowDialog() == true)
             {
                 _databaseConnection = new DatabaseConnection(ofd.FileName);

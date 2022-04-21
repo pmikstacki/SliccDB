@@ -6,6 +6,7 @@ using MessagePack;
 using SliccDB.Core;
 using MessagePack;
 using SliccDB.Exceptions;
+using SliccDB.Fluent;
 
 namespace SliccDB.Serialization
 {
@@ -55,6 +56,40 @@ namespace SliccDB.Serialization
         public IEnumerable<Relation> QueryRelations(Func<HashSet<Relation>, IEnumerable<Relation>> query)
         {
             return query.Invoke(Relations);
+        }
+
+        public void Update(GraphEntity entity)
+        {
+            if (entity is Node node)
+            {
+                Nodes.Replace(node);
+            }
+            else if (entity is Relation relation)
+            {
+                Relations.Replace(relation);
+            }
+            else
+            {
+                throw new InvalidOperationException("Invalid entity type");
+            }
+            SaveDatabase();
+        }
+
+        public void Remove(GraphEntity entity)
+        {
+            if (entity is Node node)
+            {
+                Nodes.RemoveWhere(n => n.Hash == node.Hash);
+            }
+            else if (entity is Relation relation)
+            {
+                Nodes.RemoveWhere(r => r.Hash == relation.Hash);
+            }
+            else
+            {
+                throw new InvalidOperationException("Invalid entity type");
+            }
+            SaveDatabase();
         }
 
         public IEnumerable<Node> FindNodesWithRelationSource(string relationName)

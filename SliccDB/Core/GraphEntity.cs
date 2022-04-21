@@ -18,5 +18,8 @@ namespace SliccDB.Core
         [Key(1)]
 
         public HashSet<string> Labels { get; set; } = new HashSet<string>();
+
+        [Key(2)]
+        public virtual string Hash { get; set; }
     }
 }

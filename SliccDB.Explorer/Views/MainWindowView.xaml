@@ -29,6 +29,7 @@
                     <syncfusion:SfAccordionItem Header="Open Database" Height="Auto">
                         <StackPanel>
                             <Button Content="Open..." x:Name="OpenDatabase"></Button>
+                            <Button Content="New..." x:Name="NewDatabase"></Button>
                             <Button Content="Save" x:Name="SaveDatabase"></Button>
                         </StackPanel>
                     </syncfusion:SfAccordionItem>
