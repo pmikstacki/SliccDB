@@ -67,17 +67,49 @@ var queriedRelation = Connection.Relations().Properties("Property".Value("Proper
             relation.Properties["How Much"] = "Not So Much";
             relation.Labels.Add("Love Hate Relationship");
 
-            Connection.Update(relation);
+Connection.Update(relation);
             
 ...
 
  var node = Connection.Nodes().Properties("Name".Value("Steve")).First();
             node.Properties["Name"] = "Steve2";
 
-            Connection.Update(node);
+Connection.Update(node);
 ```
 
+###### Delete Node/Relation
 
+```CSharp
+var toDelete = Connection.CreateNode(
+                new Dictionary<string, string>() { { "Name", "Tom" } },
+                new HashSet<string>() { "Person" }
+            );
+
+var queryToDelete = Connection.Nodes().Properties("Name".Value("Tom")).Labels("Person").FirstOrDefault();
+
+Connection.Delete(queryToDelete);
+```
+```CSharp
+ var testNode1 = Connection.CreateNode(
+                new Dictionary<string, string>() { { "Name", "C" } },
+                new HashSet<string>() { "S" }
+            );
+
+            var testNode2 = Connection.CreateNode(
+                new Dictionary<string, string>() { { "Name", "A" } },
+                new HashSet<string>() { "S" }
+            );            
+
+var properties = new Dictionary<string, string>();
+var labels = new HashSet<string>();
+properties.Add("Test", "Test");
+labels.Add("Test on a node!");
+Connection.CreateRelation("Test", sn => sn.First(x => x.Hash == testNode1.Hash), tn => tn.First(a => a.Hash == testNode2.Hash), properties, labels);
+
+var queriedRelation = Connection.Relations("Test").FirstOrDefault();
+
+Connection.Delete(queriedRelation);
+```
 #### Why it exists?
 I just need embedded Graph Database Solution that supports Cypher Language.
 Graph DBMS is a perfect solution for some gamedev ai-related stuff (Procedural Behaviour Design, Perception and context awareness storage), but every solution needs a server. Imagine that in order to play your game you must install Neo4J's server in the first place, or every time your npc makes a decision it queries Azure Cloud to check how much he likes pizza. It's unreliable and forces you to host a game server for the entirety of a game's lifetime even though your game is singleplayer. Sounds stupid? Well, ask EA about Simcity 2013 - they thought it's a great idea! But really, Graph DBMS has other use cases. [Watch this video to know more about Graph DBMS](https://www.youtube.com/watch?v=GekQqFZm7mA)
