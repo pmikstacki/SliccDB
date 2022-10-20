@@ -132,5 +132,7 @@ Below you'll find a list of features that will be included in the 1st milestone 
 - [x] Basic Debugger App (Ability to add, remove, edit nodes and relations)
 - [ ] ORM (Object Relational Mapper) for Nodes
 
-#### Can I help?
+### Can I help?
 Of course! Any help with the SliccDB will be appreciated. 
+#### Special Thanks!
+Oleitao - He wrote first unit tests of the database!
