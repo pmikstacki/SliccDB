@@ -4,6 +4,11 @@
 ### Light Embedded Graph Database for .net
 <img src="/SliccDB.Explorer/Res/SLICC_500.png" width="200" height="200" align="right">
 
+### Important Disclaimer
+Since I am now working on my thesis I don't have time neccessary to work on SliccDB.
+I am looking for contributors. Please reach out by email ja.to.mixer@gmail.com
+Thanks!
+
 #### What is it?
 Think of it like SQLite for graph databases. There were some efforts to build something like this (such as Graph Engine) but Microsoft decided to abandon all of their graph database related projects. Be aware that I have no intention to make this some sort of Neo4J .net Clone. It will be not fully compliant with features of mentioned database. ~~I intend on integrating Cypher, because it is an ISO standard GQL (Graph Query Language). More info and resources about cypher can be found on their site (http://opencypher.org/)~~
 ##### Update regarding Cypher
