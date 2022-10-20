@@ -135,5 +135,5 @@ Below you'll find a list of features that will be included in the 1st milestone 
 ### Can I help?
 Of course! Any help with the SliccDB will be appreciated. 
 #### Special Thanks!
-[Oleitao](https://github.com/oleitao) He wrote first unit tests of the database!
-[HoLLy-Hacker (cool name tho) ](https://github.com/HoLLy-HaCKeR) - He performance tested key functionalities of SliccDB and found a few errors. 
+- [Oleitao](https://github.com/oleitao) He wrote first unit tests of the database!
+- [HoLLy-Hacker (cool name tho) ](https://github.com/HoLLy-HaCKeR) - He performance tested key functionalities of SliccDB and found a few errors. 
