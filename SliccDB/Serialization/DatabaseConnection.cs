@@ -40,10 +40,8 @@ namespace SliccDB.Serialization
             }
             else
             {
-                File.Create(filePath);
                 Database = new Database();
                 this.ConnectionStatus = ConnectionStatus.Connected;
-
             }
         }
 
