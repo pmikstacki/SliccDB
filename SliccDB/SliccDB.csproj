@@ -6,8 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Caliburn.Micro.Start" Version="3.2.0" />
-    <PackageReference Include="GraphX" Version="3.0.0" />
     <PackageReference Include="MessagePack" Version="2.3.85" />
   </ItemGroup>
 

@@ -68,12 +68,12 @@ public static class DatabaseConnectionExtensions
     {
         var entities = new HashSet<GraphEntity>();
 
-        allEntities.AsParallel().ForAll(node =>
+        foreach (var entity in allEntities)
         {
-            var commonLabels = node.Labels.Count(x => labels.Contains(x));
-            if (commonLabels == node.Labels.Count)
-                entities.Add(node);
-        });
+            var commonLabels = entity.Labels.Count(x => labels.Contains(x));
+            if (commonLabels == entity.Labels.Count)
+                entities.Add(entity);
+        }
 
         return entities;
     }
@@ -81,18 +81,18 @@ public static class DatabaseConnectionExtensions
     public static HashSet<GraphEntity> Properties(this HashSet<GraphEntity> allEntities, params KeyValuePair<string, string>[] properties)
     {
         var entities = new HashSet<GraphEntity>();
-        allEntities.AsParallel().ForAll(entity =>
+        foreach(var entity in allEntities)
         {
             foreach (var keyValuePair in properties)
             {
-                if (!entity.Properties.ContainsKey(keyValuePair.Key)) return;
+                if (!entity.Properties.ContainsKey(keyValuePair.Key)) return null;
 
                 if (entity.Properties[keyValuePair.Key] == keyValuePair.Value)
                 {
                     entities.Add(entity);
                 }
             }
-        });
+        };
         return entities;
     }
 
@@ -100,12 +100,14 @@ public static class DatabaseConnectionExtensions
     {
         var entities = new HashSet<Node>();
 
-        allEntities.AsParallel().ForAll(node =>
+        foreach (var entity in allEntities)
         {
-            var commonLabels = node.Labels.Count(x => labels.Contains(x));
-            if (commonLabels == node.Labels.Count)
-                entities.Add(node);
-        });
+            {
+                var commonLabels = entity.Labels.Count(x => labels.Contains(x));
+                if (commonLabels == entity.Labels.Count)
+                    entities.Add(entity);
+            }
+        }
 
         return entities;
     }
@@ -113,18 +115,18 @@ public static class DatabaseConnectionExtensions
     public static HashSet<Node> Properties(this HashSet<Node> allEntities, params KeyValuePair<string, string>[] properties)
     {
         var entities = new HashSet<Node>();
-        allEntities.AsParallel().ForAll(entity =>
+        foreach (var entity in allEntities)
         {
             foreach (var keyValuePair in properties)
             {
-                if (!entity.Properties.ContainsKey(keyValuePair.Key)) return;
+                if (!entity.Properties.ContainsKey(keyValuePair.Key)) return null;
 
                 if (entity.Properties[keyValuePair.Key] == keyValuePair.Value)
                 {
                     entities.Add(entity);
                 }
             }
-        });
+        }
         return entities;
     }
 
@@ -133,12 +135,12 @@ public static class DatabaseConnectionExtensions
     {
         var entities = new HashSet<Relation>();
 
-        allEntities.AsParallel().ForAll(node =>
+        foreach (var entity in allEntities)
         {
-            var commonLabels = node.Labels.Count(x => labels.Contains(x));
-            if (commonLabels == node.Labels.Count)
-                entities.Add(node);
-        });
+            var commonLabels = entity.Labels.Count(x => labels.Contains(x));
+            if (commonLabels == entity.Labels.Count)
+                entities.Add(entity);
+        }
 
         return entities;
     }

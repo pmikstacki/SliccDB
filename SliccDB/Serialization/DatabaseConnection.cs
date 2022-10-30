@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using MessagePack;
 using SliccDB.Core;
-using MessagePack;
 using SliccDB.Exceptions;
 using SliccDB.Fluent;
 
@@ -38,7 +37,7 @@ namespace SliccDB.Serialization
                     Database = MessagePackSerializer.Deserialize<Database>(bytes);
                     this.ConnectionStatus = ConnectionStatus.Connected;
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
                     Database = new Database();
                     this.ConnectionStatus = ConnectionStatus.Connected;

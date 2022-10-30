@@ -1,10 +1,9 @@
 ﻿using System.Linq;
-using GraphX.Common.Models;
 using Node = SliccDB.Core.Node;
 
 namespace SliccDB.Explorer.ViewModels
 {
-    public class NodeVisualViewModel : VertexBase
+    public class NodeVisualViewModel
     {
         public string Hash { get; set; }
         public string Labels { get; set; }
