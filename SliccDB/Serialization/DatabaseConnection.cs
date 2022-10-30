@@ -20,7 +20,14 @@ namespace SliccDB.Serialization
         public HashSet<Relation> Relations => Database?.Relations;
 
         public ConnectionStatus ConnectionStatus { get; set; }
-        public DatabaseConnection(string filePath)
+        private readonly bool realtime;
+
+        /// <summary>
+        /// Creates new Database Connection Instance
+        /// </summary>
+        /// <param name="filePath">Path to a database file</param>
+        /// <param name="realtime">if true, attempts to save the database on every operation. Disabled by default as it is memory intensive</param>
+        public DatabaseConnection(string filePath, bool realtime = false)
         {
             FilePath = filePath;
             if (File.Exists(filePath))
@@ -31,7 +38,7 @@ namespace SliccDB.Serialization
                     Database = MessagePackSerializer.Deserialize<Database>(bytes);
                     this.ConnectionStatus = ConnectionStatus.Connected;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Database = new Database();
                     this.ConnectionStatus = ConnectionStatus.Connected;
@@ -43,6 +50,7 @@ namespace SliccDB.Serialization
                 Database = new Database();
                 this.ConnectionStatus = ConnectionStatus.Connected;
             }
+            this.realtime = realtime;
         }
 
         public IEnumerable<Node> QueryNodes(Func<HashSet<Node>, IEnumerable<Node>> query)
@@ -125,7 +133,7 @@ namespace SliccDB.Serialization
             HashSet<string> lablSet = new HashSet<string>();
             var node = new Node(properties ?? props, labels ?? lablSet);
             Database.Nodes.Add(node);
-            SaveDatabase();
+            if(realtime) SaveDatabase();
             return node;
         }
 
@@ -144,7 +152,7 @@ namespace SliccDB.Serialization
             Dictionary<string, string> props = new Dictionary<string, string>();
             HashSet<string> lablSet = new HashSet<string>();
             Database.Relations.Add(new Relation(relationName, properties ?? props, labels ?? lablSet, sourceNodeObject.Hash, targetNodeObject.Hash));
-            SaveDatabase();
+            if (realtime) SaveDatabase();
 
         }
     }
