@@ -47,7 +47,7 @@ using System.Windows.Markup;
 
 //[assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.Satellite)]
 
-[assembly:XmlnsDefinition("http://mlsagl", "Microsoft.Msagl.WpfGraphControl")]
+//[assembly:XmlnsDefinition("http://mlsagl", "Microsoft.Msagl.WpfGraphControl")]
 [assembly:ThemeInfo(
     ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
                              //(used if a resource is not found in the page, 

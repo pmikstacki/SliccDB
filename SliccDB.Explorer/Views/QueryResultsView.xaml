@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              xmlns:syncfusionskin ="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
-             xmlns:wpfGraphControl="http://mlsagl"
+             xmlns:wpfGraphControl="clr-namespace:Microsoft.Msagl.WpfGraphControl;assembly=Microsoft.Msagl.WpfGraphControl"
              syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=Office2019Black}"
              mc:Ignorable="d" 
              MinHeight="400">

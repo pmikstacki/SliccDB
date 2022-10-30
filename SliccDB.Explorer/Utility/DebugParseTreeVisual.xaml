@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SliccDB.Explorer.Utility"
-        xmlns:wpfGraphControl="http://mlsagl"
+        xmlns:wpfGraphControl="clr-namespace:Microsoft.Msagl.WpfGraphControl;assembly=Microsoft.Msagl.WpfGraphControl"
+
         mc:Ignorable="d"
         Title="DebugParseTreeVisual" Height="450" Width="800">
     <Grid>

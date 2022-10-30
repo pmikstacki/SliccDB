@@ -8,7 +8,7 @@
         xmlns:syncfusionskin ="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
         syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=Office2019Black}"
         xmlns:core="clr-namespace:SliccDB.Core;assembly=SliccDB"
-        xmlns:wpfGraphControl="http://mlsagl"
+        xmlns:graph="clr-namespace:Microsoft.Msagl.WpfGraphControl;assembly=Microsoft.Msagl.WpfGraphControl"
         xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:utility="clr-namespace:SliccDB.Explorer.Utility"
         mc:Ignorable="d" Height="450" Width="800" Title="SLICC DB Explorer" Icon="/Res/SLICC_128.png">
@@ -64,7 +64,7 @@
             </Grid.RowDefinitions>
             <TabControl Margin="0,0,0,5" Grid.Row="0">
                 <TabItem Header="Full Structure">
-                    <wpfGraphControl:AutomaticGraphLayoutControl x:Name="LayoutControl" Graph="{Binding Graph}" Background="#FF3B3A39" Foreground="White"/>
+                    <graph:AutomaticGraphLayoutControl x:Name="LayoutControl" Graph="{Binding Graph}" Background="#FF3B3A39" Foreground="White"/>
                 </TabItem>
                 <TabItem Header="Query Results Structure">
                     <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
