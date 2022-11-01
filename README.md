@@ -14,7 +14,7 @@ Expect new stuff!
 ## Nuget Package
 You can download nuget package from [here](https://www.nuget.org/packages/SliccDB/) or by using this command
 ```
-
+NuGet\Install-Package SliccDB
 ```
 
 #### What is it?
