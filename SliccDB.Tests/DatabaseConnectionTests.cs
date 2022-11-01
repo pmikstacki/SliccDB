@@ -70,7 +70,11 @@ namespace SliccDB.Tests
         {
             CreateNodes();
 
-            var selectedNode = Connection.QueryNodes(x => x.Where(xa => xa.Properties["Name"] == "Steve").ToList()).First();
+            var selectedNode = Connection.QueryNodes(x => x.Where(xa =>
+            {
+                xa.Properties.TryGetValue("Name", out var name);
+                return name == "Steve";
+            }).ToList()).First();
             Assert.IsTrue(selectedNode.Labels.Count > 0, "Node not found.");
         }
 
@@ -137,17 +141,55 @@ namespace SliccDB.Tests
                 new HashSet<string>() { "Person" }
                 );
         }
-        
+
+        [Test]
+        public void MapperGetNode()
+        {
+            MapperCreateNodes();
+            var foundTrain = Connection.Nodes<Train>();
+            Assert.IsTrue(foundTrain.Values.ToList().Exists(x => x.Destination == "Warsaw") && foundTrain.Values.ToList().Exists(x => x.Destination == "Katowice"), foundTrain.Count.ToString());
+        }
+
+
+        [Test]
+        public void MapperGetRelation()
+        {
+            Connection.ClearDatabase();
+            MapperCreateNodes();
+            MapperCreateRelation();
+            var foundTrain = Connection.Relations<RidesTo>();
+            Assert.IsTrue(foundTrain.Values.ToList().Exists(x => x.PersonName == "Adam") && foundTrain.Values.ToList().Exists(x => x.StationNumber == 2));
+        }
+
+        private void MapperCreateNodes()
+        {
+            Connection.CreateNode(new Train() { Destination = "Warsaw", SerialNumber = "CE2332" });
+            Connection.CreateNode(new Train() { Destination = "Katowice", SerialNumber = "CE2356" });
+        }
+
+        private void MapperCreateRelation()
+        {
+            Connection.CreateRelation(n =>
+                Connection.Nodes().Properties("Destination".Value("Katowice")).FirstOrDefault(),
+                a => Connection.Nodes().Properties("Destination".Value("Warsaw")).FirstOrDefault(),
+                new RidesTo(){PersonName = "Adam",StationNumber = 2});
+        }
+
         [Test]
         public void TestNodeUpdateTest()
         {
-
+            Connection.ClearDatabase();
+            CreateNodes();
+            CreateRelations();
             var node = Connection.Nodes().Properties("Name".Value("Steve")).First();
             node.Properties["Name"] = "Steve2";
-
             Connection.Update(node);
 
-            var selectedNode = Connection.QueryNodes(Nodes => Nodes.Where(foundNode => foundNode.Properties["Name"] == "Steve2").ToList()).First();
+            var selectedNode = Connection.QueryNodes(Nodes => Nodes.Where(foundNode =>
+            {
+                foundNode.Properties.TryGetValue("Name", out var newName);
+                return newName == "Steve2";
+            }).ToList()).First();
             Assert.IsTrue(selectedNode != null, "Node not found.");
         }
 
@@ -155,6 +197,7 @@ namespace SliccDB.Tests
         [Test]
         public void RelationUpdateTest()
         {
+            Connection.ClearDatabase();
             CreateNodes();
             CreateRelations();
             UpdateSchema();
@@ -171,17 +214,16 @@ namespace SliccDB.Tests
         [Test]
         public void NodeDeleteTest()
         {
-
+            Connection.ClearDatabase();
             var toDelete = Connection.CreateNode(
                 new Dictionary<string, string>() { { "Name", "Tom" } , {"Age", "0"}},
                 new HashSet<string>() { "Person" }
             );
 
-            var queryToDelete = Connection.Nodes().Properties("Name".Value("Tom")).Labels("Person").FirstOrDefault();
-
+            var queryToDelete = Connection.Nodes().Properties("Name".Value("Tom"))?.Labels("Person").FirstOrDefault();
             Connection.Delete(queryToDelete);
 
-            var queryToCheck = Connection.Nodes().Properties("Name".Value("Tom")).Labels("Person").FirstOrDefault();
+            var queryToCheck = Connection.Nodes().Properties("Name".Value("Tom"))?.Labels("Person").FirstOrDefault();
 
             Assert.IsTrue(queryToCheck == null, "Node was not removed");
 
@@ -214,10 +256,15 @@ namespace SliccDB.Tests
             var selectedRelation = Connection.QueryRelations(relations=> relations.Where(rel => rel.RelationName == "Test").ToList()).FirstOrDefault();
             Assert.IsTrue(selectedRelation == null, "Relation still exists");
         }
+
         public void UpdateSchema()
         {
-
             var schema = Connection.Schemas.FirstOrDefault(s => s.Label == "Person");
+            if (schema == null)
+            {
+                schema = Connection.CreateSchema("Person",
+                    new List<Property>() { new() { FullTypeName = "System.String", Name = "Name" } });
+            }
             schema.Properties.Add(new() { FullTypeName = "System.Double", Name = "Age" });
             Connection.UpdateSchema(schema);
         }
@@ -242,5 +289,17 @@ namespace SliccDB.Tests
         {
             Connection.ClearDatabase();
         }
+    }
+
+    public class Train
+    {
+        public string SerialNumber { get; set; }
+        public string Destination { get; set; }
+    }
+
+    public class RidesTo
+    {
+        public string PersonName { get; set; }
+        public int StationNumber { get; set; }
     }
 }

@@ -11,10 +11,11 @@
 	  <PackageIcon>SLICC_128.png</PackageIcon>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageId>SliccDB</PackageId>
-  	<Version>0.0.1</Version>
+  	<Version>0.1.0</Version>
   	<Description>A simple, one file graph database!</Description>
   	<Authors>Piotr Mikstacki</Authors>
 	<ProjectUrl>https://github.com/pmikstacki/SliccDB</ProjectUrl>
+	  <readMeMdUrl>https://raw.githubusercontent.com/pmikstacki/SliccDB/master/README.md</readMeMdUrl>
   </PropertyGroup>
 
   <ItemGroup>

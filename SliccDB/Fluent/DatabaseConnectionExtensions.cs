@@ -10,10 +10,58 @@ public static class DatabaseConnectionExtensions
 {
     public static HashSet<Node> Nodes(this DatabaseConnection db)
     {
-        var nodes = new HashSet<Node>();
-        foreach (var node in db.Nodes)
-            nodes.Add(node);
-        return nodes;
+        return db.Nodes;
+    }
+
+    public static Dictionary<string, T> Nodes<T>(this DatabaseConnection db)
+    {
+        if (!db.Schemas.Exists(s => s.Label == typeof(T).Name))
+            return new Dictionary<string, T>();
+
+        var filledObjects = new Dictionary<string, T>();
+        foreach (var node in db.Nodes().Where(x => x.Labels.Contains(typeof(T).Name)))
+        {
+            var newTypeInstance = (T) Activator.CreateInstance(typeof(T));
+
+            db.FillObjectFromProperties(node, newTypeInstance);
+            filledObjects.Add(node.Hash, newTypeInstance);
+        }
+
+        return filledObjects;
+    }
+
+    public static Dictionary<string, T> Relations<T>(this DatabaseConnection db)
+    {
+        if (!db.Schemas.Exists(s => s.Label == typeof(T).Name))
+            return new Dictionary<string, T>();
+
+        var filledObjects = new Dictionary<string, T>();
+        foreach (var node in db.Relations().Where(x => x.RelationName == typeof(T).Name))
+        {
+            var newTypeInstance = (T) Activator.CreateInstance(typeof(T));
+
+            db.FillObjectFromProperties(node, newTypeInstance);
+            filledObjects.Add(node.Hash, (T)newTypeInstance);
+        }
+
+        return filledObjects;
+    }
+
+    public static Dictionary<string, T> Entities<T>(this DatabaseConnection db)
+    {
+        if (!db.Schemas.Exists(s => s.Label == typeof(T).Name))
+            return new Dictionary<string, T>();
+
+        var filledObjects = new Dictionary<string, T>();
+        foreach (var node in db.Entities().Where(x => x.Labels.Contains(typeof(T).Name)))
+        {
+            var newTypeInstance = (T) Activator.CreateInstance(typeof(T));
+
+            db.FillObjectFromProperties(node, newTypeInstance);
+            filledObjects.Add(node.Hash, (T)newTypeInstance);
+        }
+
+        return filledObjects;
     }
 
     public static HashSet<Relation> Relations(this DatabaseConnection db)
@@ -102,11 +150,11 @@ public static class DatabaseConnectionExtensions
 
         foreach (var entity in allEntities)
         {
-            {
-                var commonLabels = entity.Labels.Count(x => labels.Contains(x));
-                if (commonLabels == entity.Labels.Count)
-                    entities.Add(entity);
-            }
+
+            var commonLabels = entity.Labels.Count(x => labels.Contains(x));
+            if (commonLabels == labels.Length)
+                entities.Add(entity);
+
         }
 
         return entities;
@@ -129,7 +177,6 @@ public static class DatabaseConnectionExtensions
         }
         return entities;
     }
-
 
     public static HashSet<Relation> Labels(this HashSet<Relation> allEntities, params string[] labels)
     {
@@ -167,4 +214,6 @@ public static class DatabaseConnectionExtensions
     {
         return new KeyValuePair<string, string>(key, value);
     }
+
+
 }

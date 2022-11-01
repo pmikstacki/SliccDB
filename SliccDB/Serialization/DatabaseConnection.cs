@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using deniszykov.TypeConversion;
 using MessagePack;
@@ -59,6 +61,7 @@ namespace SliccDB.Serialization
 
             //init type conversion provider
             typeConversionProvider = new TypeConversionProvider();
+            typeConversionProvider.RegisterConversion<string, string>((s, s1, arg3) => s, ConversionQuality.Constructor);
         }
         /// <summary>
         /// Queries nodes based on generic delegate type
@@ -174,7 +177,8 @@ namespace SliccDB.Serialization
             var relationsLinkedWithNodes = Relations.RemoveWhere(r => r.SourceHash == entity.Hash || r.TargetHash == entity.Hash);
             var relations = Relations.RemoveWhere(r => r.Hash == entity.Hash);
 
-            SaveDatabase();
+            if (realtime) SaveDatabase();
+
             return nodes + relationsLinkedWithNodes + relations;
         }
         /// <summary>
@@ -414,5 +418,120 @@ namespace SliccDB.Serialization
                 entity.Properties.Add(missingField.Name, "");
             }
         }
+        /// <summary>
+        /// Attempts to fill object from properties
+        /// </summary>
+        /// <typeparam name="T">Type of the object to fill</typeparam>
+        /// <param name="entity">entity, in which property values are stored</param>
+        /// <param name="objectToFill">object that will be filled with property values</param>
+        public void FillObjectFromProperties<T>(GraphEntity entity, T objectToFill)
+        {
+            var objectProperties = typeof(T).GetProperties();
+            foreach (var property in objectProperties)
+            {
+                
+                entity.Properties.TryGetValue(property.Name, out var propertyValue);
+                if(typeConversionProvider.TryConvert(typeof(string), property.PropertyType, propertyValue, out var convertedValue))
+                    property.SetValue(objectToFill, convertedValue);
+            }
+        }
+
+        /// <summary>
+        /// Attempts to fill object from properties
+        /// </summary>
+        /// <typeparam name="T">Type of the object to fill</typeparam>
+        /// <param name="entity">entity, in which property values are stored</param>
+        /// <param name="objectToFill">object that will be filled with property values</param>
+        public Dictionary<string, string> GetPropertiesFromObject<T>(T objectToExtractValuesFrom)
+        {
+            var objectProperties = typeof(T).GetProperties();
+            var result = new Dictionary<string, string>();
+            foreach (var property in objectProperties)
+            {
+
+                result.Add(property.Name, property.GetValue(objectToExtractValuesFrom).ToString());
+            }
+
+            return result;
+        }
+        /// <summary>
+        ///  Creates a Relation
+        /// </summary>
+        /// <typeparam name="T">Type of the inserted node</typeparam>
+        /// <param name="value">object properties</param>
+        public void CreateNode<T>(T value, params string[] additionalLabels)
+        {
+            var label = value.GetType().Name;
+            if (!Schemas.Exists(s => s.Label == label))
+            {
+                CreateSchema(label,
+                    value.GetType().GetProperties().Select(prop => new Property()
+                        { FullTypeName = prop.PropertyType.FullName, Name = prop.Name }).ToList());
+            }
+            else
+            {
+                UpdateSchema(new Schema()
+                {
+                    Label = label,
+                    Properties = value.GetType().GetProperties().Select(prop => new Property()
+                        { FullTypeName = prop.PropertyType.FullName, Name = prop.Name }).ToList()
+                });
+            }
+            Debug.WriteLine("Node created");
+            var labels = new HashSet<string>(additionalLabels);
+            labels.Add(label);
+            CreateNode(GetPropertiesFromObject(value), labels);
+        }
+
+        /// <summary>
+        /// Creates a Relation given an object. 
+        /// </summary>
+        /// <typeparam name="T">Type of the inserted node</typeparam>
+        /// <param name="properties">object from which property values will be extracted</param>
+        public void CreateRelation<T>(Func<HashSet<Node>, Node> sourceNode, Func<HashSet<Node>, Node> targetNode, T properties, params string[] additionalLabels)
+        {
+            var label = properties.GetType().Name;
+            if (!Schemas.Exists(s => s.Label == label))
+            {
+                CreateSchema(label,
+                    properties.GetType().GetProperties().Select(prop => new Property()
+                        { FullTypeName = prop.PropertyType.FullName, Name = prop.Name }).ToList());
+            }
+            else
+            {
+                UpdateSchema(new Schema()
+                {
+                    Label = label,
+                    Properties = properties.GetType().GetProperties().Select(prop => new Property()
+                        { FullTypeName = prop.PropertyType.FullName, Name = prop.Name }).ToList()
+                });
+            }
+
+            CreateRelation(label, sourceNode, targetNode, GetPropertiesFromObject(properties), new HashSet<string>(additionalLabels));
+        }
+
+        public void Update<T>(string hash, T objectValues)
+        {
+            var entity = this.Entities().FirstOrDefault(x => x.Hash == hash);
+            var propertiesWithValues = GetPropertiesFromObject(objectValues);
+            foreach (var propertyWithValue in propertiesWithValues)
+            {
+                if (entity.Properties.ContainsKey(propertyWithValue.Key))
+                    entity.Properties[propertyWithValue.Key] = propertyWithValue.Value;
+            }
+
+            Update(entity);
+        }
+
+        public int Delete(string hash)
+        {
+            var nodes = Nodes.RemoveWhere(n => n.Hash == hash);
+            var relationsLinkedWithNodes = Relations.RemoveWhere(r => r.SourceHash == hash || r.TargetHash == hash);
+            var relations = Relations.RemoveWhere(r => r.Hash == hash);
+
+            if(realtime) SaveDatabase();
+            return nodes + relationsLinkedWithNodes + relations;
+        }
+
     }
 }
