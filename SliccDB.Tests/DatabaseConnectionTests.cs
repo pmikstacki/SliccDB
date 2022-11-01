@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using SliccDB.Exceptions;
 using SliccDB.Fluent;
 
 namespace SliccDB.Tests
@@ -27,15 +28,32 @@ namespace SliccDB.Tests
         }
 
         [Test]
+        public void CreateSchemaTest()
+        {
+            try
+            {
+                Connection.CreateSchema("Person",
+                    new List<Property>() { new() { FullTypeName = "System.String", Name = "Name" } });
+            }
+            catch (SchemaExistsException ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+
+            Assert.IsTrue(Connection.Schemas.Exists(x => x.Label == "Person"));
+        }
+
+      
+        [Test]
         public void CreateNodeTest()
         {
             CreateNodes();
 
-            Assert.IsTrue(NodeOne.Labels.Where(x => x.Contains("Person")).FirstOrDefault() != null, "Label Person not found.");
-            Assert.IsTrue(NodeTwo.Labels.Where(x => x.Contains("Person")).FirstOrDefault() != null, "Label Person not found.");
+            Assert.IsTrue(NodeOne.Labels.FirstOrDefault(x => x.Contains("Person")) != null, "Label Person not found.");
+            Assert.IsTrue(NodeTwo.Labels.FirstOrDefault(x => x.Contains("Person")) != null, "Label Person not found.");
 
-            Assert.IsTrue(NodeOne.Properties.Where(x => x.Key.Equals("Name")).FirstOrDefault().Value.Equals("Alice"), "Property Name not found.");
-            Assert.IsTrue(NodeTwo.Properties.Where(x => x.Key.Equals("Name")).FirstOrDefault().Value.Equals("Steve"), "Property Name not found.");
+            Assert.IsTrue(NodeOne.Properties.FirstOrDefault(x => x.Key.Equals("Name")).Value.Equals("Alice"), "Property Name not found.");
+            Assert.IsTrue(NodeTwo.Properties.FirstOrDefault(x => x.Key.Equals("Name")).Value.Equals("Steve"), "Property Name not found.");
         }
 
         [Test]
@@ -44,7 +62,7 @@ namespace SliccDB.Tests
             CreateNodes();
             CreateRelations();
 
-            Assert.IsTrue(Connection.Relations.Where(x => x.RelationName.Equals("Likes")).Count() > 0, "Relation not found.");
+            Assert.IsTrue(Connection.Relations.Any(x => x.RelationName.Equals("Likes")), "Relation not found.");
         }
 
         [Test]
@@ -52,7 +70,7 @@ namespace SliccDB.Tests
         {
             CreateNodes();
 
-            var selectedNode = Connection.QueryNodes(x => x.Where(x => x.Properties["Name"] == "Steve").ToList()).First();
+            var selectedNode = Connection.QueryNodes(x => x.Where(xa => xa.Properties["Name"] == "Steve").ToList()).First();
             Assert.IsTrue(selectedNode.Labels.Count > 0, "Node not found.");
         }
 
@@ -62,8 +80,19 @@ namespace SliccDB.Tests
             CreateNodes();
             CreateRelations();
 
-            var selectedEdge = Connection.QueryRelations(x => x.Where(x => x.RelationName == "Likes").ToList()).First();
+            var selectedEdge = Connection.QueryRelations(x => x.Where(xa => xa.RelationName == "Likes").ToList()).First();
             Assert.IsTrue(selectedEdge.Labels.Count > 0, "Edge not found");
+        }
+
+        [Test]
+        public void HaveNodesSchemaEnforced()
+        {
+
+            CreateNodes();
+            CreateRelations();
+            UpdateSchema();
+            var nodesWithLabel = Connection.Nodes().Where(x => x.Labels.Contains("Person"));
+            Assert.IsTrue(nodesWithLabel.ToList().Exists(x => x.Properties.ContainsKey("Age")));
         }
 
         [Test]
@@ -99,12 +128,12 @@ namespace SliccDB.Tests
         private void CreateNodes()
         {
             NodeOne = Connection.CreateNode(
-                new Dictionary<string, string>() { { "Name", "Alice" } },
+                new Dictionary<string, string>() { { "Name", "Alice"}, {"Age", "18"} },
                 new HashSet<string>() { "Person" }
                 );
 
             NodeTwo = Connection.CreateNode(
-                new Dictionary<string, string>() { { "Name", "Steve" } },
+                new Dictionary<string, string>() { { "Name", "Steve" }, { "Age", "20" } },
                 new HashSet<string>() { "Person" }
                 );
         }
@@ -118,7 +147,7 @@ namespace SliccDB.Tests
 
             Connection.Update(node);
 
-            var selectedNode = Connection.QueryNodes(x => x.Where(x => x.Properties["Name"] == "Steve2").ToList()).First();
+            var selectedNode = Connection.QueryNodes(Nodes => Nodes.Where(foundNode => foundNode.Properties["Name"] == "Steve2").ToList()).First();
             Assert.IsTrue(selectedNode != null, "Node not found.");
         }
 
@@ -126,14 +155,16 @@ namespace SliccDB.Tests
         [Test]
         public void RelationUpdateTest()
         {
-
+            CreateNodes();
+            CreateRelations();
+            UpdateSchema();
             var relation = Connection.Relations("Likes").ToList().First();
             relation.Properties["How Much"] = "Not So Much";
             relation.Labels.Add("Love Hate Relationship");
 
             Connection.Update(relation);
 
-            var selectedRelation = Connection.QueryRelations(x => x.Where(x => x.RelationName == "Likes").ToList()).First();
+            var selectedRelation = Connection.QueryRelations(relations => relations.Where(foundRelation => foundRelation.RelationName == "Likes").ToList()).First();
             Assert.IsTrue(selectedRelation != null && selectedRelation.Properties["How Much"] == "Not So Much" && selectedRelation.Labels.Contains("Love Hate Relationship"), "Relation not found or properties weren't changed.");
         }
 
@@ -142,7 +173,7 @@ namespace SliccDB.Tests
         {
 
             var toDelete = Connection.CreateNode(
-                new Dictionary<string, string>() { { "Name", "Tom" } },
+                new Dictionary<string, string>() { { "Name", "Tom" } , {"Age", "0"}},
                 new HashSet<string>() { "Person" }
             );
 
@@ -180,9 +211,17 @@ namespace SliccDB.Tests
 
             Connection.Delete(queriedRelation);
 
-            var selectedRelation = Connection.QueryRelations(x => x.Where(x => x.RelationName == "Test").ToList()).FirstOrDefault();
+            var selectedRelation = Connection.QueryRelations(relations=> relations.Where(rel => rel.RelationName == "Test").ToList()).FirstOrDefault();
             Assert.IsTrue(selectedRelation == null, "Relation still exists");
         }
+        public void UpdateSchema()
+        {
+
+            var schema = Connection.Schemas.FirstOrDefault(s => s.Label == "Person");
+            schema.Properties.Add(new() { FullTypeName = "System.Double", Name = "Age" });
+            Connection.UpdateSchema(schema);
+        }
+
 
         private void Setup()
         {
@@ -193,6 +232,15 @@ namespace SliccDB.Tests
             {
                 Connection = new DatabaseConnection(filePath);
             }
+
+           
+        }
+
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            Connection.ClearDatabase();
         }
     }
 }

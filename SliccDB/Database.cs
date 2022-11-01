@@ -17,7 +17,8 @@ namespace SliccDB
         public HashSet<Node> Nodes { get; set; } = new HashSet<Node>();
         [Key(1)]
         public HashSet<Relation> Relations { get; set; }= new HashSet<Relation>();
-
+        [Key(2)]
+        public List<Schema> Schemas { get; set; } = new List<Schema>();
         public void Dispose()
         {
             Dispose(true);
@@ -31,6 +32,7 @@ namespace SliccDB
                 // free managed resources
                 Nodes.Clear();
                 Relations.Clear();
+                Schemas.Clear();
             }
             // free native resources if there are any.
         }

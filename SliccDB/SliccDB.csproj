@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <None Include="SLICC_128.png" Pack="true" PackagePath="\"/>
+	  <None Include="SLICC_128.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="deniszykov.TypeConversion" Version="3.0.8" />
     <PackageReference Include="MessagePack" Version="2.3.85" />
   </ItemGroup>
 
