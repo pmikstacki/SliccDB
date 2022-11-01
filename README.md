@@ -4,7 +4,7 @@
 ### Light Embedded Graph Database for .net
 <img src="/SliccDB/SLICC_128.png" width="128" height="128" align="right">
 
-### Important Disclaimer
+### Important News
 ~~Since I am now working on my thesis I don't have time neccessary to work on SliccDB.
 I am looking for contributors. Please reach out by email ja.to.mixer@gmail.com
 Thanks!~~
