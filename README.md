@@ -131,7 +131,7 @@ Graph DBMS is a perfect solution for some gamedev ai-related stuff (Procedural B
 **DB Explorer is now considered obsolete, but you can still get the source code [here](https://github.com/pmikstacki/SliccDB.Explorer/)**
 ![DB Explorer Screenshot](/screenshots/Explorer.png)\
 DB Explorer is a companion app currently used for interaction with database. It allows for CRUD operations on the database to test its' functionalities. 
-The app is still in development.
+This app is now considered legacy code and was moved to a different [repository](https://github.com/pmikstacki/SliccDB.Explorer)
 
 #### Progress
 Below you'll find a list of features that will be included in the 1st milestone release of SliccDB:
