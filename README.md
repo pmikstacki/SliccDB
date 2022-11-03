@@ -139,7 +139,7 @@ Below you'll find a list of features that will be included in the 1st milestone 
 - [x] Serialization (Reading and Writing)
 - [x] Queries
 - [x] Basic Debugger App (Ability to add, remove, edit nodes and relations)
-- [ ] ORM (Object Relational Mapper) for Nodes
+- [x] ORM (Object Relational Mapper) for Nodes
 
 ### Can I help?
 Of course! Any help with the SliccDB will be appreciated. 
