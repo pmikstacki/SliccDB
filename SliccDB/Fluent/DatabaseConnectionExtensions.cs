@@ -232,9 +232,8 @@ public static class DatabaseConnectionExtensions
         {
             foreach (var keyValuePair in properties)
             {
-                if (!entity.Properties.ContainsKey(keyValuePair.Key)) return null;
-
-                if (entity.Properties[keyValuePair.Key] == keyValuePair.Value)
+                if (entity.Properties.ContainsKey(keyValuePair.Key) 
+                    && entity.Properties[keyValuePair.Key] == keyValuePair.Value)
                 {
                     entities.Add(entity);
                 }

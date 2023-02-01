@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using NUnit.Framework;
 using SliccDB.Core;
 using SliccDB.Serialization;
 using System;
@@ -13,7 +14,7 @@ namespace SliccDB.Tests
 {
     public class Tests
     {
-        private const string fileName = "sample";
+        private const string fileName = "sample.siccdb";
 
         public Node NodeOne { get; set; }
 
@@ -147,7 +148,7 @@ namespace SliccDB.Tests
         {
             MapperCreateNodes();
             var foundTrain = Connection.Nodes<Train>();
-            Assert.IsTrue(foundTrain.Values.ToList().Exists(x => x.Destination == "Warsaw") && foundTrain.Values.ToList().Exists(x => x.Destination == "Katowice"), foundTrain.Count.ToString());
+            Assert.IsTrue(foundTrain.Values.ToList().Exists(x => x.SerialNumber == "CE2356") && foundTrain.Values.ToList().Exists(x => x.SerialNumber == "CE2332"), foundTrain.Count.ToString());
         }
 
 
@@ -158,21 +159,23 @@ namespace SliccDB.Tests
             MapperCreateNodes();
             MapperCreateRelation();
             var foundTrain = Connection.Relations<RidesTo>();
-            Assert.IsTrue(foundTrain.Values.ToList().Exists(x => x.PersonName == "Adam") && foundTrain.Values.ToList().Exists(x => x.StationNumber == 2));
+            Assert.IsTrue(foundTrain.Values.ToList().Exists(x => x.Platform == 2));
         }
 
         private void MapperCreateNodes()
         {
-            Connection.CreateNode(new Train() { Destination = "Warsaw", SerialNumber = "CE2332" });
-            Connection.CreateNode(new Train() { Destination = "Katowice", SerialNumber = "CE2356" });
+            Connection.CreateNode(new Train() { SerialNumber = "CE2332" });
+            Connection.CreateNode(new Train() { SerialNumber = "CE2356" });
+            Connection.CreateNode(new Station() { City = "Katowice" });
+            Connection.CreateNode(new Station() { City = "Warsaw" });
         }
 
         private void MapperCreateRelation()
         {
             Connection.CreateRelation(n =>
-                Connection.Nodes().Properties("Destination".Value("Katowice")).FirstOrDefault(),
-                a => Connection.Nodes().Properties("Destination".Value("Warsaw")).FirstOrDefault(),
-                new RidesTo(){PersonName = "Adam",StationNumber = 2});
+                Connection.Nodes().Properties("SerialNumber".Value("CE2332")).FirstOrDefault(),
+                a => Connection.Nodes().Properties("SerialNumber".Value("CE2356")).FirstOrDefault(),
+                new RidesTo(){ Platform = 2 });
         }
 
         [Test]
@@ -275,15 +278,8 @@ namespace SliccDB.Tests
 
         private void Setup()
         {
-            string folderPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\data\"));
-            string filePath = Path.Combine(folderPath, fileName);
-
-            if (System.IO.File.Exists(filePath))
-            {
-                Connection = new DatabaseConnection(filePath);
-            }
-
-           
+            string filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, fileName);
+            Connection = new DatabaseConnection(filePath);
         }
 
 
@@ -297,12 +293,14 @@ namespace SliccDB.Tests
     public class Train
     {
         public string SerialNumber { get; set; }
-        public string Destination { get; set; }
     }
 
-    public class RidesTo
+    public class Station
     {
-        public string PersonName { get; set; }
-        public int StationNumber { get; set; }
+        public string City { get; set; }
+    }
+    public class RidesTo
+    { 
+        public int Platform { get; set; }
     }
 }

@@ -55,6 +55,8 @@ namespace SliccDB.Serialization
             {
                 Database = new Database();
                 this.ConnectionStatus = ConnectionStatus.Connected;
+                var bytes = MessagePackSerializer.Serialize(Database);
+                File.WriteAllBytes(filePath, bytes);
             }
             this.realtime = realtime;
 
