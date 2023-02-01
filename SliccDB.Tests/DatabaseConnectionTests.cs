@@ -220,7 +220,10 @@ namespace SliccDB.Tests
                 new HashSet<string>() { "Person" }
             );
 
-            var queryToDelete = Connection.Nodes().Properties("Name".Value("Tom"))?.Labels("Person").FirstOrDefault();
+            var queryToDelete = Connection.Nodes()
+                .Properties("Name".Value("Tom"))?
+                .Labels("Person")
+                .FirstOrDefault();
             Connection.Delete(queryToDelete);
 
             var queryToCheck = Connection.Nodes().Properties("Name".Value("Tom"))?.Labels("Person").FirstOrDefault();

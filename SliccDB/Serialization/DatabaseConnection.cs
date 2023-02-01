@@ -49,7 +49,6 @@ namespace SliccDB.Serialization
                 {
                     Database = new Database();
                     this.ConnectionStatus = ConnectionStatus.Connected;
-
                 }
             }
             else
