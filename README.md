@@ -11,11 +11,21 @@ Thanks!~~
 I've made SliccDB (actually a companion app, but still) my thesis Project topic! Now I can focus on development of this library to full capacity. 
 Expect new stuff!
 
-## Nuget Package
+## Where do i get this????
+You have three options to get this package.
+### Nuget Package
 You can download nuget package from [here](https://www.nuget.org/packages/SliccDB/) or by using this command
 ```
 NuGet\Install-Package SliccDB
 ```
+
+### Unstable Builds
+If you feel adventurous, you can download SliccDB as a build artifact from github actions. Note that these are not official releases, so they may contain bugs. 
+But, they can also contain features not yet found on nuget... you never know ¯\_(ツ)_/¯
+
+### Compiling from source
+You can always just clone this repo, open the solution with visual studio and compile it yourself. The build will produce both the dll and nuget package. 
+You can also just build it with dotnet tool thingy. You're the boss here!
 
 #### What is it?
 Think of it like SQLite for graph databases. There were some efforts to build something like this (such as Graph Engine) but Microsoft decided to abandon all of their graph database related projects. Be aware that I have no intention to make this some sort of Neo4J .net Clone. It will be not fully compliant with features of mentioned database. ~~I intend on integrating Cypher, because it is an ISO standard GQL (Graph Query Language). More info and resources about cypher can be found on their site (http://opencypher.org/)~~
