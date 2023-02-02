@@ -23,10 +23,14 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore /property:Version=0.1.1.${{github.run_number}}
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Pack
-      run: dotnet pack ~/SliccDB/SliccDB.csproj
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.2
+      with:
+       name: Latest
+       path: ~/work/SliccDB/SliccDB/SliccDB/bin/Debug/SliccDB.0.1.1.${{github.run_number}}.nupkg
+  
 
     
