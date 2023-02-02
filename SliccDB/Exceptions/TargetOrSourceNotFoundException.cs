@@ -2,8 +2,11 @@
 
 namespace SliccDB.Exceptions
 {
-    public class TargetOrSourceNotFoundException : Exception
+    public class TargetOrSourceNotFoundException : SliccDbException
     {
-        public override string Message => "<Target> or <Source> node with provided hashes doesn't exist";
+        public TargetOrSourceNotFoundException()
+        {
+            Message = "<Target> or <Source> node with provided hashes doesn't exist";
+        }
     }
 }

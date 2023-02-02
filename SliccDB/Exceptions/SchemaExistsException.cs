@@ -3,9 +3,8 @@ using SliccDB.Core;
 
 namespace SliccDB.Exceptions;
 
-public class SchemaExistsException : Exception
+public class SchemaExistsException : SliccDbException
 {
-    public override string Message { get; }
     public override string HelpLink { get; set; }
 
     public SchemaExistsException(string schemaName) : base()

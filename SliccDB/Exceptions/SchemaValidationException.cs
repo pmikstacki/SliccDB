@@ -4,13 +4,8 @@ using System.Text;
 
 namespace SliccDB.Exceptions;
 
-public class SchemaValidationException : Exception
+public class SchemaValidationException : SliccDbException
 {
-    public override string Message
-    {
-        get;
-    }
-
     public SchemaValidationException(string label, Dictionary<string, string> properties)
     {
         StringBuilder sb = new StringBuilder();
