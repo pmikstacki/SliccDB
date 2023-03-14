@@ -4,12 +4,8 @@
 ### Light Embedded Graph Database for .net
 <img src="https://raw.githubusercontent.com/pmikstacki/SliccDB/master/SliccDB/SLICC_128.png" width="128" height="128" align="right">
 
-### Important News
-~~Since I am now working on my thesis I don't have time neccessary to work on SliccDB.
-I am looking for contributors. Please reach out by email ja.to.mixer@gmail.com
-Thanks!~~
-I've made SliccDB (actually a companion app, but still) my thesis Project topic! Now I can focus on development of this library to full capacity. 
-Expect new stuff!
+## What is it?
+Think of it like SQLite for graph databases. There were some efforts to build something like this (such as Graph Engine) but Microsoft decided to abandon all of their graph database related projects. Be aware that I have no intention to make this some sort of Neo4J .net Clone. It will be not fully compliant with features of mentioned database.
 
 ## Where do i get this????
 You have three options to get this package.
@@ -27,10 +23,6 @@ But, they can also contain features not yet found on nuget... you never know ¯\
 You can always just clone this repo, open the solution with visual studio and compile it yourself. The build will produce both the dll and nuget package. 
 You can also just build it with dotnet tool thingy. You're the boss here!
 
-#### What is it?
-Think of it like SQLite for graph databases. There were some efforts to build something like this (such as Graph Engine) but Microsoft decided to abandon all of their graph database related projects. Be aware that I have no intention to make this some sort of Neo4J .net Clone. It will be not fully compliant with features of mentioned database. ~~I intend on integrating Cypher, because it is an ISO standard GQL (Graph Query Language). More info and resources about cypher can be found on their site (http://opencypher.org/)~~
-##### Update regarding Cypher
-I've decided to focus on extending and optimizing C# <-> database interaction. Cypher implementation is under consideration.
 
 ### Examples
 Here are some simple examples:
