@@ -1,7 +1,7 @@
 # SliccDB
 ![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=c-sharp&logoColor=white) ![.Net](https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white) ![Visual Studio](https://img.shields.io/badge/Visual%20Studio-5C2D91.svg?style=for-the-badge&logo=visual-studio&logoColor=white)
 ![Version](https://img.shields.io/badge/Version-0.1.1-brightgreen?style=for-the-badge)
-### Light Embedded Graph Database for .net
+Light Embedded Graph Database for .net
 <img src="https://raw.githubusercontent.com/pmikstacki/SliccDB/master/SliccDB/SLICC_128.png" width="128" height="128" align="right">
 
 ## What is it?
