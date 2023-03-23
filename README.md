@@ -8,7 +8,7 @@ Light Embedded Graph Database for .net
 ## What is it?
 Think of it like SQLite for graph databases. There were some efforts to build something like this (such as Graph Engine) but Microsoft decided to abandon all of their graph database related projects. Be aware that I have no intention to make this some sort of Neo4J .net Clone. It will be not fully compliant with features of mentioned database.
 
-## Where do i get this????
+## Installation
 You have three options to get this package.
 ### Nuget Package
 You can download nuget package from [here](https://www.nuget.org/packages/SliccDB/) or by using this command
