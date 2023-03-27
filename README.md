@@ -186,7 +186,8 @@ I just need embedded Graph Database Solution that supports Cypher Language.
 Graph DBMS is a perfect solution for some gamedev ai-related stuff (Procedural Behaviour Design, Perception and context awareness storage), but every solution needs a server. Imagine that in order to play your game you must install Neo4J's server in the first place, or every time your npc makes a decision it queries Azure Cloud to check how much he likes pizza. It's unreliable and forces you to host a game server for the entirety of a game's lifetime even though your game is singleplayer. Sounds stupid? Well, ask EA about Simcity 2013 - they thought it's a great idea! But really, Graph DBMS has other use cases. [Watch this video to know more about Graph DBMS](https://www.youtube.com/watch?v=GekQqFZm7mA)
 
 ### SliccDB Studio
-You can download SliccDB Studio [here](https://github.com/pmikstacki/SliccDBStudio)
+You can download SliccDB Studio [here](https://github.com/pmikstacki/SliccDBStudio).
+
 SliccDB Studio is a companion app currently used for interaction with database. It allows for CRUD operations on the database to test its' functionalities. 
 
 ![SliccDB Studio Screenshot](https://raw.githubusercontent.com/pmikstacki/SliccDBStudio/main/Screenshot.png)
