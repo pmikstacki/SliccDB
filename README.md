@@ -204,7 +204,7 @@ Below you'll find a list of features that will be included in the 1st milestone 
 - [x] Basic Debugger App (Ability to add, remove, edit nodes and relations)
 - [x] Schemas for Nodes and Relations
 - [x] ORM (Object Relational Mapper) for Nodes and Relations
-- [ ] New Companion App
+- [x] New Companion App
 ### Can I help?
 Of course! Any help with the SliccDB will be appreciated. 
 #### Special Thanks!
